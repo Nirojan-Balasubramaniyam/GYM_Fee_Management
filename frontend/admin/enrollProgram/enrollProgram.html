@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Fees Management - User Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <aside id="sidebar">
+        <button id="toggleSidebar">&times;</button>
+        <ul id="navItems">
+            <h1 id="greeting">Welcome, <span id="adminName"></span>!</h1>
+            <li><a id="dashboardBtn">Dashboard</a></li>
+            <li><a id="membersBtn">Members Management</a></li>
+            <li><a id="enrollProgramBtn">Enroll Programs</a></li>
+            <li><a id="paymentBtn">Payment</a></li>
+            <li><a id="approvalRequestBtn">Approval Requests</a></li>
+            <li><a id="reportBtn">Reports</a></li>
+            <li><a id="logoutBtn">Logout</a></li>
+            <div id="reportDropdown" class="dropdown-buttons">
+                <ul>
+                    <li><a href="" id="userReportBtn">User Reports</a></li>
+                    <li><a href="" id="paymentReportBtn">Payment Reports</a></li>
+                    <li><a href="" id="programReportBtn">Program Reports</a></li>
+                </ul>
+            </div>
+        </ul>
+    </aside>
+    <section id="content">
+        <h2 id="contentTitle"></h2>
+        <div id="dynamicContent">
+            <div id="enrollProgramCard">
+            <div id="enrollment-container">
+
+                <!-- Member Selection -->
+                <div class="form-group">
+                    <label for="memberSelect">Select Member:</label>
+                    <select id="memberSelect" class="form-input">
+                        <option value="">Select a Member</option>
+                        <!-- Options will be added dynamically here -->
+                    </select>
+                </div>
+
+                <!-- Training Programs Selection -->
+                <div id="trainingProgramSelection">
+                    <div id="cardioSection">
+                        <h3>Cardio Programs</h3>
+                        <div id="cardioPrograms">
+                            <!-- Cardio checkboxes will be added dynamically here -->
+                        </div>
+                    </div>
+
+                    <div id="weightTrainingSection">
+                        <h3>Weight Training Programs</h3>
+                        <div id="weightPrograms">
+                            <!-- Weight Training checkboxes will be added dynamically here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Cost and Payment Method -->
+                <div id="programEnrollPaymentForm" class="form-group">
+                    <p>Total Payment: Rs <span id="totalPayment">0</span></p>
+                    <p id="additionalPayment"></p>
+                    <label>Select payment method:</label>
+                    <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
+                    <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
+                </div>
+
+                <button id="addProgramsBtn">Add Programs</button>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    <script src="enrollProgram.js"></script>
+</body>
+
+</html>

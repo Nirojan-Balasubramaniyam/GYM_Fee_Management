@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Fees Management - User Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <aside id="sidebar">
+        <button id="toggleSidebar">&times;</button>
+        <ul id="navItems">
+            <h1 id="greeting">Welcome, <span id="adminName"></span>!</h1>
+            <li><a id="dashboardBtn">Dashboard</a></li>
+            <li><a id="membersBtn">Members Management</a></li>
+            <li><a id="enrollProgramBtn">Enroll Programs</a></li>
+            <li><a id="paymentBtn">Payment</a></li>
+            <li><a id="approvalRequestBtn">Approval Requests</a></li>
+            <li><a id="reportBtn">Reports</a></li>
+            <li><a id="logoutBtn">Logout</a></li>
+            <div id="reportDropdown" class="dropdown-buttons">
+                <ul>
+                    <li><a href="" id="userReportBtn">User Reports</a></li>
+                    <li><a href="" id="paymentReportBtn">Payment Reports</a></li>
+                    <li><a href="" id="programReportBtn">Program Reports</a></li>
+                </ul>
+            </div>
+        </ul>
+    </aside>
+    <section id="content">
+        <h2 id="contentTitle"></h2>
+        <div id="dynamicContent">
+            <div id="paymentCard">
+            <div id="payment-container">
+                <div id="payment-header">
+                    <input type="text" id="searchUserInput" placeholder="Enter member user id/ NIC">
+                    <button id="searchUserBtn">Search</button>
+                </div>
+                <div>
+                </div>
+                <div id="payment-method-container">
+                    <h2>Payment</h2>
+                    <form>
+                        <input type="number" id="paymentAmountInput" placeholder="Enter payment amount">
+                        <label>Select payment method</label>
+                        <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
+                        <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
+                        <button type="button" id="addPaymentBtn">Add Payment</button>
+                    </form>
+                </div>
+
+                <div id="member-details-container">
+                    <div>
+                        <p>User name : <span id="userName"></span></p>
+                        <p>User ID : <span id="userID"></span></p>
+                        <p>Total Payment : <span id="totalPayment"></span></p>
+                        <p>Last paid date : <span id="lastPaidDate"></span></p>
+                        <p>Due Date : <span id="dueDate"></span></p>
+                    </div>
+                    <div class="member-training-program">
+                        <p>Training programs :
+                        <div id="trainingProgramsDisplay">
+
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <script src="payment.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    overflow: hidden; /* Disable page scrolling */
+}
+
+#greeting {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
+#content {
+    margin-top: 20px; /* To account for the header */
+    padding: 20px;
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+aside {
+    background-color: #2c3e50;
+    width: 250px;
+    position: relative;    
+    min-height: 100vh;
+    padding-top: 0px;
+    transition: width 0.3s;
+}
+
+#navItems {
+    list-style-type: none;
+    position: relative;
+    top: 50px;
+}
+
+#navItems li {
+    margin: 10px 0;
+}
+
+#navItems li a {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+#navItems li a:hover {
+    background-color:white;
+    color: #1abc9c;
+}
+#logoutBtn{
+    background-color: red;
+    color: white;
+    font-weight: 800;
+    position: absolute;
+    top: 625px;
+    left: 0px;
+    width: 250px;
+    margin: 0px;  
+}
+#logoutBtn:hover{
+    background-color: white;
+    color: red;
+}
+
+button {
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.light-green {
+    background-color: #1abc9c;
+    color: white;
+}
+
+.dark-green {
+    background-color: white;
+    color: rgb(4, 72, 59);
+}
+
+#toggleSidebar {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 15px;
+    text-align: center;
+    font-size: 30px;
+    position: absolute;
+    top: 2px;
+    left: 10px;
+    transition: transform 0.3s;
+    width: 50px;
+}
+
+#sidebar.minimized {
+    width: 70px;
+}
+
+#sidebar.minimized #navItems {
+    display: none;
+}
+.dropdown-buttons{
+    display: none;
+    flex-direction: column;
+}
+.reportDropdownShow {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    top: 0px;
+    left: 20px;
+    width: 200px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+#memberReportCard{
+    margin-top: 50px;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}#membersReportSection {
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+/* Set the table's container to a fixed height and make it scrollable */
+#membersReportContainer {
+    max-height: 550px; /* Adjust this value as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; /* Optional: Add a border around the container */
+}
+
+/* Styling for the members report table */
+#membersReportTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#membersReportTable th, #membersReportTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#membersReportTable th {
+    background-color: #1abc9c;
+    color: white;
+    text-align: center;
+    position: sticky;
+    top: 0;
+}
+
+#membersReportTable td {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.member-row:hover {
+    background-color: #f1f1f1;
+}
+
+/* Styles for the Training Programs List */
+.training-program-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.training-program-header {
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.training-program-item {
+    margin-left: 20px;
+    font-size: 13px;
+    color: #34495e;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Fees Management - User Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+
+    <aside id="sidebar">
+        <button id="toggleSidebar">&times;</button>
+        <ul id="navItems">
+            <h1 id="greeting">Welcome, <span id="adminName"></span>!</h1>
+            <li><a id="dashboardBtn">Dashboard</a></li>
+            <li><a  id="membersBtn">Members Management</a></li>
+            <li><a id="enrollProgramBtn">Enroll Programs</a></li>
+            <li><a id="paymentBtn">Payment</a></li>
+            <li><a id="approvalRequestBtn">Approval Requests</a></li>
+            <li><a id="reportBtn">Reports</a></li>
+            <li><a id="logoutBtn">Logout</a></li>
+            <div id="reportDropdown" class="dropdown-buttons">
+                <ul>
+                    <li><a  id="userReportBtn">User Reports</a></li>
+                    <li><a  id="paymentReportBtn">Payment Reports</a></li>
+                    <li><a  id="programReportBtn">Program Reports</a></li>
+                </ul>
+            </div>
+        </ul>
+    </aside>
+
+    <section id="content">
+        <h2 id="contentTitle"></h2>
+        <div id="dynamicContent">
+            <div id="dashboardCard">
+                <div class="admin-info"></div>
+                <div class="grid-container">
+                    <div class="badge" id="income"></div>
+                    <div class="badge" id="overdue"></div>
+                </div>
+    
+                <div class="notification-container">
+                    <table border="1" id="adminNotificationTable">
+                        <tr>
+                            <th colspan="3">Notifications</th>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <script src="adminScript.js"></script>
+</body>
+
+</html>

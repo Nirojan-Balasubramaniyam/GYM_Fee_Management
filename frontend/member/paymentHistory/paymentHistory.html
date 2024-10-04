@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Fees Management - User Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <i id="notificationBtn" class="fas fa-bell"></i>
+        <h1 id="greeting">Welcome, <span id="username"></span>!</h1>        
+    </header>
+
+    <aside id="sidebar">
+        <button id="toggleSidebar">&times;</button>
+        <ul id="navItems">
+            <li><a href="#" id="userInfoBtn">User Info</a></li>
+            <li><a href="#" id="bmiBtn">Calculate BMI</a></li>
+            <li><a href="#" id="paymentBtn">Make Payment</a></li>
+            <li><a href="#" id="changeProgramsBtn">Change Programs</a></li>
+            <li><a href="#" id="paymentHistoryBtn">Payment History</a></li> 
+            <li><a href="#" id="changeInfoBtn">Change Member Information</a></li> 
+            <li><a href="#" id="logoutBtn">Logout</a></li>  
+        </ul>
+    </aside>
+
+    <section id="content">
+        <h2 id="contentTitle"></h2>
+        <div id="dynamicContent">
+            <div id="content">
+                <div id="start" class="payment-history-card">
+                    <table id="paymentHistoryTable" class="payment-table">
+                        <thead>
+                            <tr>
+                                <th class="payment-table-header">Payment Type</th>
+                                <th class="payment-table-header">Amount (LKR)</th>
+                                <th class="payment-table-header">Paid Date</th>
+                                <th class="payment-table-header">Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+    </section>
+    <script src="paymentHistory.js"></script>
+</body>
+</html>

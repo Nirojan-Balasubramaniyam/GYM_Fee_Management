@@ -1,0 +1,1100 @@
+{
+  "Members": [
+    {
+      "id": "M001",
+      "FirstName": "Rojan",
+      "LastName": "Baala",
+      "UserName": "rojan",
+      "NIC": "970783288v",
+      "Phone": "12344567",
+      "DoB": "2000-01-01",
+      "Gender": "male",
+      "Adress": "undefined",
+      "EmergencyContactPrsn": "undefined",
+      "EmergencyContact": "undefined"
+    },
+    {
+      "id": "M002",
+      "UserName": "rojan",
+      "Password": "a123",
+      "FirstName": "Rojan",
+      "LastName": "Baala",
+      "NIC": "970783288v",
+      "Dob": "2000-01-01",
+      "Phone": "12357456",
+      "MonthlyPayment": null,
+      "RegistrationDate": "2000-01-01",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M003",
+      "UserName": "rojan",
+      "Password": "z123",
+      "FirstName": "Rojan",
+      "LastName": "Baala",
+      "NIC": "970783288v",
+      "Dob": "2000-01-01",
+      "Phone": "12357456",
+      "MonthlyPayment": null,
+      "RegistrationDate": "2000-01-01",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M010",
+      "UserName": "kannan",
+      "Password": "1234567899",
+      "FirstName": "kannan",
+      "LastName": "thas",
+      "NIC": "123",
+      "Gender": "male",
+      "Adress": "vs",
+      "EmergencyContact": "1234567898",
+      "EmergencyContactPrsn": "hh",
+      "DoB": "2024-10-04",
+      "Phone": "1234567899",
+      "RegistrationDate": "2024-10-02",
+      "MonthlyPayment": null,
+      "UserRoll": "member"
+    },
+    {
+      "id": "M011",
+      "FirstName": "tharun",
+      "LastName": "thas",
+      "UserName": "tharun",
+      "NIC": "123456789789",
+      "Phone": "1234567899",
+      "DoB": "2024-10-04",
+      "Gender": "male",
+      "Adress": "kopay junction ,kopay",
+      "EmergencyContactPrsn": "nesaraja",
+      "EmergencyContact": "1234567898"
+    },
+    {
+      "id": "M012",
+      "FirstName": "kannan",
+      "LastName": "kumard",
+      "UserName": "kamal",
+      "NIC": "789456123456",
+      "Phone": "1234567895",
+      "DoB": "2024-10-02",
+      "Gender": "male",
+      "Adress": "kkas road, Chunnakam",
+      "EmergencyContact": "7896541235",
+      "EmergencyContactPrsn": "rajinikanth"
+    }
+  ],
+  "Users": [
+    {
+      "id": "M001",
+      "MemberID": "M001",
+      "UserName": "rojan",
+      "Password": "12344567",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M002",
+      "MemberID": "M002",
+      "UserName": "kamal",
+      "Password": "a123",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M004",
+      "MemberID": "M004",
+      "UserName": "rojan",
+      "Password": "c123",
+      "UserRoll": "admin"
+    },
+    {
+      "id": "M010",
+      "MemberID": "M010",
+      "UserName": "ram",
+      "Password": "1234567899",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M011",
+      "MemberID": "M011",
+      "UserName": "tharun",
+      "Password": "1234567899",
+      "UserRoll": "member"
+    },
+    {
+      "id": "M012",
+      "MemberID": "M012",
+      "UserName": "kamal",
+      "Password": "1234567895",
+      "UserRoll": "member"
+    }
+  ],
+  "TrainingProgramTypes": [
+    {
+      "ProgramTypeName": "cardio",
+      "id": "P001"
+    },
+    {
+      "ProgramTypeName": "weighttraining",
+      "id": "P002"
+    }
+  ],
+  "TrainingProgramActivities": [
+    {
+      "ActivittID": 1,
+      "TypeID": "P001",
+      "ActivityName": "Running",
+      "Cost": 500,
+      "id": "A001"
+    },
+    {
+      "ActivittID": 2,
+      "TypeID": "P001",
+      "ActivityName": "Cycling",
+      "Cost": 400,
+      "id": "A002"
+    },
+    {
+      "ActivittID": 3,
+      "TypeID": "P001",
+      "ActivityName": "Aerobic",
+      "Cost": 550,
+      "id": "A003"
+    },
+    {
+      "ActivittID": 4,
+      "TypeID": "P002",
+      "ActivityName": "Body Building",
+      "Cost": 1300,
+      "id": "A004"
+    },
+    {
+      "ActivittID": 5,
+      "TypeID": "P002",
+      "ActivityName": "Strength Training",
+      "Cost": 1600,
+      "id": "A005"
+    },
+    {
+      "ActivittID": 6,
+      "TypeID": "P002",
+      "ActivityName": "Body Shaping",
+      "Cost": 1600,
+      "id": "A006"
+    }
+  ],
+  "EnrolledTrainingPrograms": [
+    {
+      "id": "E001",
+      "ActivittID": 2,
+      "ProgramTypeID": "P001",
+      "MemberID": "M001"
+    },
+    {
+      "id": "E002",
+      "ActivittID": 4,
+      "ProgramTypeID": "P002",
+      "MemberID": "M002"
+    },
+    {
+      "id": "E003",
+      "ActivittID": 3,
+      "ProgramTypeID": "P001",
+      "MemberID": "M003"
+    },
+    {
+      "id": "E008",
+      "MemberID": "M011",
+      "ActivittID": 1,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E009",
+      "MemberID": "M011",
+      "ActivittID": 2,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E010",
+      "MemberID": "M011",
+      "ActivittID": 3,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E011",
+      "MemberID": "M002",
+      "ActivittID": 5,
+      "ProgramTypeID": "P002"
+    },
+    {
+      "id": "E013",
+      "MemberID": "M001",
+      "ActivittID": 1,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E015",
+      "MemberID": "M010",
+      "ActivittID": 1,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E016",
+      "MemberID": "M001",
+      "ActivittID": 3,
+      "ProgramTypeID": "P001"
+    },
+    {
+      "id": "E017",
+      "MemberID": "M011",
+      "ActivittID": 4,
+      "ProgramTypeID": "P002"
+    }
+  ],
+  "Payments": [
+    {
+      "id": "P001",
+      "MemberID": "M001",
+      "PaymentType": "Initial",
+      "Amount": 1500,
+      "PaidDate": "2024-01-01",
+      "DueDate": null
+    },
+    {
+      "id": "P002",
+      "MemberID": "M002",
+      "PaymentType": "Initial",
+      "Amount": 1500,
+      "PaidDate": "2024-05-01",
+      "DueDate": null
+    },
+    {
+      "id": "P003",
+      "MemberID": "M003",
+      "PaymentType": "Initial",
+      "Amount": 1500,
+      "PaidDate": "2024-06-01",
+      "DueDate": null
+    },
+    {
+      "id": "P004",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 2500,
+      "PaidDate": "2024-01-01",
+      "DueDate": "2024-02-01"
+    },
+    {
+      "id": "P005",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 2000,
+      "PaidDate": "2024-05-02",
+      "DueDate": "2024-06-02"
+    },
+    {
+      "id": "P006",
+      "MemberID": "M003",
+      "PaymentType": "Monthly",
+      "Amount": 1800,
+      "PaidDate": "2024-09-05",
+      "DueDate": "2024-10-05"
+    },
+    {
+      "id": "P007",
+      "MemberID": "M010",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaidDate": "2024-10-02",
+      "DueDate": null
+    },
+    {
+      "id": "P008",
+      "MemberID": "M011",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaidDate": "2024-10-02",
+      "DueDate": null
+    },
+    {
+      "id": "P010",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P011",
+      "MemberID": "M003",
+      "PaymentType": "Monthly",
+      "Amount": 550,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P012",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 1300,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P013",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 2500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P014",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P015",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P016",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P017",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P018",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P019",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 400,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P020",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P021",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 400,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P022",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P023",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P024",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P025",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P026",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 400,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P027",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P028",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P029",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P030",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P031",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P032",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P033",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 950,
+      "PaidDate": "2024-10-02",
+      "DueDate": "2024-11-01",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P039",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 800,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P040",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 555,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P042",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 555,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P043",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 854,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P044",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 965,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P045",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 541,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P047",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 845,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P070",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 455,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P080",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 855,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P081",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 45,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P085",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 54,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P085",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 556,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P047",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 45,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P048",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 851,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P050",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P051",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P047",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P052",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P053",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 900,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P056",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 1450,
+      "PaidDate": "2024-09-03",
+      "DueDate": "2024-10-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P057",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 2900,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P058",
+      "MemberID": "M003",
+      "PaymentType": "Monthly",
+      "Amount": 1850,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P059",
+      "MemberID": "M003",
+      "PaymentType": "Monthly",
+      "Amount": 550,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P060",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 1450,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P061",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 1300,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P062",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 0,
+      "PaidDate": "2024-10-03",
+      "DueDate": "2024-11-02",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P047",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 2900,
+      "PaidDate": "2024-09-06",
+      "DueDate": "2024-10-05",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P065",
+      "MemberID": "M003",
+      "PaymentType": "Monthly",
+      "Amount": 550,
+      "PaidDate": "2024-09-05",
+      "DueDate": "2024-10-06",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P066",
+      "MemberID": "M010",
+      "PaymentType": "Monthly",
+      "Amount": 500,
+      "PaidDate": "2024-09-07",
+      "DueDate": "2024-10-06",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P072",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 2500,
+      "PaidDate": "2024-10-01T00:00:00.000Z",
+      "DueDate": "2024-10-31"
+    },
+    {
+      "id": "P075",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 550,
+      "PaidDate": "2024-10-04",
+      "DueDate": "2024-11-03",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P076",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 1450,
+      "PaidDate": "2024-10-04",
+      "DueDate": "2024-11-03",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P077",
+      "MemberID": "M002",
+      "PaymentType": "Monthly",
+      "Amount": 522,
+      "PaidDate": "2024-10-01",
+      "DueDate": "2024-10-31"
+    },
+    {
+      "id": "P078",
+      "MemberID": "M011",
+      "PaymentType": "Monthly",
+      "Amount": 1300,
+      "PaidDate": "2024-10-04",
+      "DueDate": "2024-11-03",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P079",
+      "MemberID": "M012",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": {},
+      "PaidDate": "2024-10-04",
+      "DueDate": null
+    }
+  ],
+  "Alerts": [
+    {
+      "id": "AT001",
+      "AlertType": "overdue",
+      "Amount": 2500,
+      "DueDate": "2024-06-01",
+      "MemberID": "M001",
+      "Status": true
+    },
+    {
+      "id": "AT002",
+      "AlertType": "overdue",
+      "Amount": 2500,
+      "DueDate": "2024-06-02",
+      "MemberID": "M002",
+      "Status": false
+    },
+    {
+      "id": "AT003",
+      "AlertType": "renewal",
+      "Amount": 2500,
+      "DueDate": "2024-10-05",
+      "MemberID": "M003",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "renewal",
+      "Amount": 2900,
+      "DueDate": "2024-11-02",
+      "MemberID": "M002",
+      "Status": false
+    },
+    {
+      "id": "AT004",
+      "AlertType": "renewal",
+      "Amount": 54,
+      "DueDate": "2024-11-02",
+      "MemberID": "M001",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "renewal",
+      "Amount": 2900,
+      "DueDate": "2024-11-02",
+      "MemberID": "M002",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "renewal",
+      "Amount": 500,
+      "DueDate": "2024-10-06",
+      "MemberID": "M010",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "overdue",
+      "Amount": 1450,
+      "DueDate": "2024-10-02",
+      "MemberID": "M011",
+      "Status": true
+    }
+  ],
+  "ApprovalRequests": [
+    {
+      "id": "AR001",
+      "RequestType": "newMember",
+      "MemberID": "N/A",
+      "MemberDetails": {
+        "UserName": "John",
+        "Password": "0712345678",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "Nic": "123456789V",
+        "Dob": "1995-06-15",
+        "Phone": "0712345678",
+        "RegistrationDate": "2024-10-01",
+        "ReceiptNumber": "REC123456"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR002",
+      "RequestType": "payment",
+      "MemberID": "M001",
+      "PaymentDetails": {
+        "PaymentType": "monthly",
+        "Amount": 2500,
+        "PaidDate": "2024-10-01",
+        "ReceiptNumber": "PAY987654"
+      },
+      "Status": "Accepted"
+    },
+    {
+      "id": "AR004",
+      "RequestType": "payment",
+      "MemberID": "M002",
+      "PaymentDetails": {
+        "PaymentType": "monthly",
+        "Amount": 522,
+        "ReceiptNumber": "hytyh45",
+        "PaidDate": "2024-10-01"
+      },
+      "Status": "Accepted"
+    },
+    {
+      "id": "AR011",
+      "RequestType": "memberInfoChange",
+      "MemberID": "M001",
+      "MemberInfoChangeDetails": {
+        "FirstName": "Rojan",
+        "LastName": "Bala",
+        "Phone": "12344567",
+        "NIC": "970783288v"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR013",
+      "RequestType": "memberInfoChange",
+      "MemberID": "M001",
+      "NewEnrollProgramIDDetails": {
+        "FirstName": "Rojan",
+        "LastName": "Bala",
+        "Phone": "12344567",
+        "NIC": "970783288v"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR014",
+      "RequestType": "removeTrainingProgram",
+      "MemberID": "M011",
+      "EnrollProgramIDDetails": {
+        "ActivittID": 3,
+        "ProgramTypeID": "P001"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR015",
+      "RequestType": "removeTrainingProgram",
+      "MemberID": "M011",
+      "EnrollProgramIDDetails": {
+        "ActivittID": 3,
+        "ProgramTypeID": "P001"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR016",
+      "RequestType": "addTrainingProgram",
+      "MemberID": "M011",
+      "PaymentDetail": {
+        "id": "P070",
+        "MemberID": "M011",
+        "PaymentType": "Enrollprogram",
+        "Amount": 1300,
+        "PaidDate": "2024-10-04",
+        "DueDate": "2024-11-03",
+        "PaymentMethod": "Bank"
+      },
+      "ProgramIDDetails": {
+        "ActivittID": 4,
+        "ProgramTypeID": "P002"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR017",
+      "RequestType": "addTrainingProgram",
+      "MemberID": "M011",
+      "PaymentDetail": {
+        "id": "P071",
+        "MemberID": "M011",
+        "PaymentType": "Enrollprogram",
+        "Amount": 1300,
+        "PaidDate": "2024-10-04",
+        "DueDate": "2024-11-03",
+        "PaymentMethod": "Bank"
+      },
+      "ProgramIDDetails": {
+        "ActivittID": 4,
+        "ProgramTypeID": "P002"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR018",
+      "RequestType": "payment",
+      "MemberID": null,
+      "PaymentDetails": {
+        "PaymentType": "monthly",
+        "Amount": 900,
+        "ReceiptNumber": "asd",
+        "PaidDate": "2024-10-04"
+      },
+      "Status": "pending"
+    },
+    {
+      "id": "AR019",
+      "RequestType": "addTrainingProgram",
+      "MemberID": "M001",
+      "PaymentDetail": {
+        "id": "P073",
+        "MemberID": "M001",
+        "PaymentType": "Enrollprogram",
+        "Amount": 550,
+        "PaidDate": "2024-10-04",
+        "DueDate": "2024-11-03",
+        "PaymentMethod": "Bank"
+      },
+      "ProgramIDDetails": {
+        "ActivittID": 3,
+        "ProgramTypeID": "P001"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR020",
+      "RequestType": "removeTrainingProgram",
+      "MemberID": "M001",
+      "ProgramIDDetails": {
+        "ActivittID": 2,
+        "ProgramTypeID": "P001"
+      },
+      "Status": "Pending"
+    },
+    {
+      "id": "AR021",
+      "RequestType": "memberInfoChange",
+      "MemberID": "M001",
+      "NewEnrollProgramIDDetails": {
+        "FirstName": "Rojan",
+        "LastName": "Bala",
+        "Phone": "12344567",
+        "NIC": "970783288v"
+      },
+      "Status": "Pending"
+    }
+  ],
+  "LastId": {
+    "id": 1,
+    "MemberId": 13,
+    "AlertID": 4,
+    "EnrollProgramID": 18,
+    "PaymentID": 80,
+    "ActivityID": 7,
+    "ApprovalRequestID": 22
+  }
+}
