@@ -1,3 +1,4 @@
 backend/node_modules
 frontend/node_modules
 /node_modules
+/backend_api/Gym_Fee_Management/.vs
