@@ -3,7 +3,7 @@
     #member-management-container {
         width: 100%;
         margin: 20px auto;
-        padding: 20px;
+        padding: 0px 20px;
     }
 
     #members-header,
@@ -21,9 +21,12 @@
 
     /* Button Styling */
     #add-new-member-button,
+    #view-all-button,
+    #search-button,
     .member-management-btn,
     .member-form .form-submit-btn {
-        padding: 10px 20px;
+        padding: 5px 10px;
+        height: 30px;
         background-color: #28a745;
         color: white;
         border: none;
@@ -40,17 +43,16 @@
     #search-input {
         padding: 10px;
         border: 1px solid #ccc;
-        width: 300px;
         margin-right: 10px;
     }
 
-    #search-button {
+    /* #search-button {
         padding: 10px 20px;
         background-color: white;
         color: black;
         border: 1px solid black;
         cursor: pointer;
-    }
+    } */
 
     /* Table Styling */
 
@@ -273,16 +275,17 @@
         cursor: pointer;
     }
 
-    .edit-btn {
+    .edit-btn,
+    .delete-btn {
         background-color: #008CBA;
         color: white;
         border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
     }
 
     .delete-btn {
         background-color: #f44336;
-        color: white;
-        border: none;
     }
 
     .edit-btn:hover {
@@ -308,6 +311,27 @@
         z-index: 2000;
         /* Ensure modal content is on top */
     }
+
+    .memberContainerHeader {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #view-all-button {
+        float: right;
+    }
+
+    #search-input {
+        /* height: 30px; */
+    }
+
+    .memberSearch {
+        margin-bottom: 5px;
+    }
+
+    .searchSection {
+        margin-bottom: 10px;
+    }
 </style>
 
 <section id="content">
@@ -315,7 +339,16 @@
     <div id="dynamicContent">
         <div id="memberManageCard">
             <div id="member-management-container">
-                <button id="openAddMemberModal" class="member-management-btn">Add New Member</button>
+                <div class="memberContainerHeader">
+                    <button id="openAddMemberModal" class="member-management-btn">Add New Member</button>
+                    <div class="searchSection">
+                        <div>
+                            <input type="text" id="search-input" placeholder="Search member by User ID or NIC">
+                            <button id="search-button">Search</button>
+                        </div>
+                        <button id="view-all-button">View All Members</button>
+                    </div>
+                </div>
                 <div class="table-container">
                     <table id="memberTable" class="member-table table table-striped">
                         <thead>
@@ -441,35 +474,49 @@
 
         displayMembers();
 
-        function displayMembers() {
+        document.getElementById("search-button").addEventListener("click", () => {
+            let memberID = document.getElementById("search-input").value;
+            console.log(memberID)
+            displayMembers(memberID);
+        })
+
+        document.getElementById("view-all-button").addEventListener("click", () => {
+            displayMembers();
+        })
+
+
+        function displayMembers(memberID = null) {
             const memberTableBody = document.querySelector('#memberTable tbody');
             memberTableBody.innerHTML = "";
 
-            members.forEach(member => {
+            const filteredMembers = memberID ? members.filter(member => member.id === memberID) : members;
+            console.log(filteredMembers)
+
+            filteredMembers.forEach(member => {
                 const memberId = member.id;
                 const loggedInUserPrograms = enrolledPrograms.filter(program => program.MemberID === memberId);
                 const monthlyPayment = payments.find(payment => payment.MemberID === memberId && payment.PaymentType === "Monthly");
                 const cardioPrograms = generateListItems(loggedInUserPrograms, trainingProgramActivities, "P001");
                 const weightTrainingPrograms = generateListItems(loggedInUserPrograms, trainingProgramActivities, "P002");
                 const programList = `
-                            <ul>
-                                <b>Cardio</b>
-                                <ul>${cardioPrograms}</ul>
-                                <b>Weight Training</b>
-                                <ul>${weightTrainingPrograms}</ul>
-                            </ul>`;
+                    <ul>
+                        <b>Cardio</b>
+                        <ul>${cardioPrograms}</ul>
+                        <b>Weight Training</b>
+                        <ul>${weightTrainingPrograms}</ul>
+                    </ul>`;
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                            <td>${member.id}</td>
-                            <td>${member.FirstName} ${member.LastName}</td>
-                            <td>${member.Phone}</td>
-                            <td>${programList}</td>
-                            <td>Rs ${monthlyPayment ? monthlyPayment.Amount : 'N/A'}</td>
-                            <td>
-                                <button class="edit-btn">Edit</button>
-                                <button class="delete-btn">Delete</button>
-                            </td>`;
+                    <td>${member.id}</td>
+                    <td>${member.FirstName} ${member.LastName}</td>
+                    <td>${member.Phone}</td>
+                    <td>${programList}</td>
+                    <td>Rs ${monthlyPayment ? monthlyPayment.Amount : 'N/A'}</td>
+                    <td>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </td>`;
 
                 const editBtn = row.querySelector('.edit-btn');
                 const deleteBtn = row.querySelector('.delete-btn');
@@ -481,7 +528,10 @@
         };
 
         function generateListItems(programs, activities, typeId) {
-            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+            const filteredPrograms = programs.filter(program => {
+                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                return activity && activity.TypeID === typeId;
+            });
 
             if (filteredPrograms.length === 0) {
                 return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
@@ -491,24 +541,32 @@
                 const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
                 return activity ? activity.ActivityName : 'No matching activity';
             }).join(', ');
-        };
+        }
+
 
         async function deleteMember(memberId) {
             if (confirm("Are you sure you want to delete this member?")) {
-                const enrolledProgramsResponse = await fetch(`${enrolledTrainingProgramsUrl}?MemberID=${memberId}`);
-                const enrolledPrograms = await enrolledProgramsResponse.json();
+                try {
 
-                if (enrolledPrograms.length > 0) {
-                    for (const enrolledProgram of enrolledPrograms) {
-                        await deleteApi(enrolledTrainingProgramsUrl, enrolledProgram.id);
+                    const memberEnrolledPrograms = enrolledPrograms.filter(program => program.MemberID === memberId);
+
+                    if (enrolledPrograms.length > 0) {
+                        for (const enrolledProgram of memberEnrolledPrograms) {
+                            console.log(enrolledProgram.id)
+                            await deleteApi(enrolledTrainingProgramsUrl, enrolledProgram.id); // Deleting each enrolled program
+                        }
                     }
+
+                    await deleteApi(membersUrl, memberId);
+                    await deleteApi(usersUrl, memberId);
+
+
+                    alert("Member and their enrolled programs deleted successfully.");
+                    location.reload();
+                } catch (error) {
+                    console.error("Error deleting member and enrolled programs:", error);
+                    alert("An error occurred while deleting the member. Please try again.");
                 }
-
-                await deleteApi(membersUrl, memberId);
-                await deleteApi(usersUrl, memberId);
-
-                alert("Member and related programs deleted successfully.");
-                location.reload(); 
             }
         }
 
