@@ -8,7 +8,7 @@ namespace Gym_Fee_Management
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            //add
+            //devi
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
