@@ -48,7 +48,7 @@
         border-radius: 10px;
     }
 
-    .popup-content p {
+    .popup-body p {
         margin: 10px 0px;
         color: #2c3e50;
     }
@@ -195,17 +195,19 @@
                     <div id="popup" class="popup" style="display:none;">
                         <div class="popup-content">
                             <h3 class="sub-heading">Confirm Changes</h3>
-                            <p id="totalCost"></p>
-                            <p id="additionalAmountRaw"></p>
-                            <p id="additionalAmountbyDays"></p>
-                            <p id="finalPayment"></p>
+                            <div class="popup-body">
+                                <p id="totalCost"></p>
+                                <p id="additionalAmountRaw"></p>
+                                <p id="additionalAmountbyDays"></p>
+                                <p id="finalPayment"></p>
 
-                            <label for="receiptNumber" class="form-label">Receipt Number:</label>
-                            <input type="text" id="receiptNumber" class="input-field"
-                                placeholder="Enter Receipt Number">
+                                <label for="receiptNumber" class="form-label">Receipt Number:</label>
+                                <input type="text" id="receiptNumber" class="input-field"
+                                    placeholder="Enter Receipt Number">
 
-                            <label for="receiptUpload" class="form-label">Upload Receipt:</label>
-                            <input type="file" id="receiptUpload" class="input-field">
+                                <label for="receiptUpload" class="form-label">Upload Receipt:</label>
+                                <input type="file" id="receiptUpload" class="input-field">
+                            </div>
 
                             <button type="button" id="submitBtn" class="btn">Submit</button>
                             <button type="button" id="closePopup" class="btn-cancel">Cancel</button>
@@ -389,9 +391,9 @@
             document.getElementById('popup').style.display = 'block';
 
             if (newlySelectedProgram.length === 0 || unselectedPrograms.length > 0) {
-                document.getElementById('receiptNumber').disabled = true;
-                document.getElementById('receiptUpload').disabled = true;
+                document.querySelector(".popup-body").style.display = "none";
             } else {
+                document.querySelector(".popup-body").style.display = "block";
                 document.getElementById('receiptNumber').disabled = false;
                 document.getElementById('receiptUpload').disabled = false;
             }
