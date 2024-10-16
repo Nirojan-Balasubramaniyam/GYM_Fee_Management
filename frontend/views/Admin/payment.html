@@ -146,6 +146,7 @@
         let trainingProgramActivities = [];
         let payments = [];
         let lastIds = [];
+        let finalAmount = 0;
 
         const paymentResponse = await fetch(paymentsUrl);
         payments = await paymentResponse.json();
@@ -206,6 +207,13 @@
                 return total + (activity ? activity.Cost : 0);
             }, 0);
             document.getElementById('totalPayment').textContent = `Rs ${totalPayment}`;
+            const paymentAmount = document.getElementById('paymentAmountInput').value = totalPayment;
+            document.getElementById("monthsSelect").addEventListener("change", () => {
+                finalAmount = 0;
+                const selectedMonths = Number(document.getElementById('monthsSelect').value);
+                finalAmount = calculateDiscountedAmount(totalPayment, selectedMonths);
+                const paymentAmount = document.getElementById('paymentAmountInput').value = finalAmount;
+            });
 
             if (memberPayments.length > 0) {
                 const lastPayment = memberPayments.sort((a, b) => new Date(b.PaidDate) - new Date(a.PaidDate))[0];
@@ -218,18 +226,20 @@
         };
 
         function generateListItems(programs, activities, typeId) {
-            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+            const filteredPrograms = programs.filter(program => {
+                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                return activity && activity.TypeID === typeId;
+            });
 
             if (filteredPrograms.length === 0) {
                 return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
             }
-            return filteredPrograms
-                .map(program => {
-                    const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
-                    return activity ? activity.ActivityName : 'No matching activity';
-                })
-                .join(', ');
-        };
+
+            return filteredPrograms.map(program => {
+                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                return activity ? activity.ActivityName : 'No matching activity';
+            }).join(', ');
+        }
 
         document.getElementById('addPaymentBtn').addEventListener('click', async (event) => {
             console.log("Add Payment button clicked");
@@ -242,22 +252,37 @@
                 alert("Please select a member and enter a payment amount.");
                 return;
             }
+            const selectedMonths = Number(document.getElementById('monthsSelect').value);
 
+            const newPaymentId = generateID("P", lastIds.PaymentID);
             const paidDate = new Date();
             const dueDate = new Date();
-            dueDate.setDate(paidDate.getDate() + 30);
+
+            let paymentType = "Monthly";
+            if (selectedMonths === 1) {
+                dueDate.setDate(paidDate.getDate() + 30); // Set due date to 30 days from today
+            } else if (selectedMonths === 3) {
+                paymentType = "Quarterly";
+                dueDate.setDate(paidDate.getDate() + 90); // Set due date to 90 days (approx. 3 months)
+            } else if (selectedMonths === 6) {
+                paymentType = "Half-Yearly";
+                dueDate.setDate(paidDate.getDate() + 180); // Set due date to 180 days (approx. 6 months)
+            } else if (selectedMonths === 12) {
+                paymentType = "Annually";
+                dueDate.setDate(paidDate.getDate() + 365); // Set due date to 365 days (1 year)
+            }
 
             const newPayment = {
-                id: generateID("P", lastIds.PaymentID),
+                id: newPaymentId,
                 MemberID: memberId,
-                PaymentType: "Monthly",
-                Amount: Number(paymentAmount),
+                PaymentType: paymentType,  // Use calculated payment type
+                Amount: finalAmount,
                 PaidDate: paidDate.toISOString().split('T')[0],
                 DueDate: dueDate.toISOString().split('T')[0],
                 PaymentMethod: paymentMethod
             };
 
-            const addPaymentResponse = await postApi(paymentsUrl,newPayment);
+            const addPaymentResponse = await postApi(paymentsUrl, newPayment);
 
             if (addPaymentResponse.ok) {
                 lastIds.PaymentID++;
@@ -267,5 +292,31 @@
                 alert("Failed to add payment.");
             }
         });
+
+        function calculateDiscountedAmount(amount, months) {
+            let finalAmount;
+
+            switch (months) {
+                case 1:
+                    finalAmount = amount;
+                    break;
+                case 3:
+                    finalAmount = amount - (amount * 0.10);
+                    break;
+                case 6:
+                    finalAmount = amount - (amount * 0.15);
+                    break;
+                case 12:
+                    finalAmount = amount - (amount * 0.25);
+                    break;
+            }
+
+            console.log(finalAmount)
+            if (months === 1) {
+                return finalAmount;
+            } else {
+                return Math.ceil(finalAmount / 100) * 100;
+            }
+        }
     })
 </script>
