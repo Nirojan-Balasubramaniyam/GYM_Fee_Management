@@ -89,6 +89,14 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
+    #monthsSelect {
+        width: 200px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid green;
+        margin-top: 10px;
+    }
 </style>
 <section id="content">
     <h2 id="contentTitle">Payments</h2>
@@ -272,6 +280,28 @@
                 dueDate.setDate(paidDate.getDate() + 365); // Set due date to 365 days (1 year)
             }
 
+            const memberAlerts = alerts.filter(alert => alert.MemberID === memberId && alert.Status === true);
+            console.log(memberAlerts)
+
+            memberAlerts.sort((a, b) => {
+                const alertIdA = parseInt(a.id.substring(1), 10);
+                const alertIdB = parseInt(b.id.substring(1), 10);
+                return alertIdB - alertIdA;
+            });
+
+            const lastOverdueAlert = memberAlerts.find(alert => alert.AlertType === 'overdue');
+            const lastRenewalAlert = memberAlerts.find(alert => alert.AlertType === 'renewal');
+            console.log(lastOverdueAlert)
+            console.log(lastRenewalAlert)
+
+            if (lastOverdueAlert) {
+                lastOverdueAlert.Status = false;
+            }
+
+            if (lastRenewalAlert) {
+                lastRenewalAlert.Status = false;
+            }
+
             const newPayment = {
                 id: newPaymentId,
                 MemberID: memberId,
@@ -287,6 +317,12 @@
             if (addPaymentResponse.ok) {
                 lastIds.PaymentID++;
                 await updateLastId(lastIds);
+                if (lastOverdueAlert) {
+                    await putApi(alertsUrl, lastOverdueAlert.id, lastOverdueAlert);
+                }
+                if (lastRenewalAlert) {
+                    await putApi(alertsUrl, lastRenewalAlert.id, lastRenewalAlert);
+                }
                 alert("Payment added successfully!");
             } else {
                 alert("Failed to add payment.");
