@@ -1,0 +1,134 @@
+<style>
+    #paymentHistoryTable,
+    .payment-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .payment-table-header {
+        background-color: #1abc9c;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .payment-table-row td,
+    .notification-table-row td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        color: #34495e;
+    }
+
+    .payment-table-row:hover {
+        background-color: #f1f1f1;
+    }
+
+    .payment-history-card {
+        max-height: 400px;
+        overflow-y: auto;
+        margin: 20px 0;
+        border: 1px solid #ccc;
+    }
+
+    .payment-table td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+    #paymentHistoryTable{
+        overflow-y: auto;
+    }
+
+    #paymentHistoryTable th {
+        position: sticky;
+        top: 0;
+    }
+
+    /* Optional: Add hover effect for rows */
+    .payment-table-row:hover {
+        background-color: #f1f1f1;
+    }
+
+    #paymentHistoryCard {
+        margin-top: 10px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 500px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 20px;
+        border-radius: 10px;
+        /* width: 100%; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Payment History</h2>
+    <div id="paymentHistoryCard">
+        <div class="row">
+            <div class="col-12">
+                <div class="payment-history-card">
+                    <table id="paymentHistoryTable" class="payment-table">
+                        <thead>
+                            <tr>
+                                <th class="payment-table-header">Payment Type</th>
+                                <th class="payment-table-header">Amount (LKR)</th>
+                                <th class="payment-table-header">Paid Date</th>
+                                <th class="payment-table-header">Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const PaymentsUrl = "http://localhost:7000/Payments";
+        let payments = [];
+        let members = [];
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const paymentResponse = await fetch(PaymentsUrl);
+        payments = await paymentResponse.json();
+
+        displayPaymentHistory();
+
+        function displayPaymentHistory() {
+            const paymentTableBody = document.getElementById('paymentTableBody');
+            paymentTableBody.innerHTML = '';
+
+            const memberPayments = payments.filter(payment => payment.MemberID === loggedInUser.id);
+            if (memberPayments.length === 0) {
+                const noPaymentRow = document.createElement('tr');
+                const noPaymentCell = document.createElement('td');
+                noPaymentCell.setAttribute('colspan', 4);
+                noPaymentCell.textContent = "No payment history available.";
+                noPaymentRow.appendChild(noPaymentCell);
+                paymentTableBody.appendChild(noPaymentRow);
+                return;
+            }
+
+            memberPayments.forEach(payment => {
+                const row = document.createElement('tr');
+                row.classList.add('payment-table-row');
+                row.innerHTML = `
+                    <td>${payment.PaymentType}</td>
+                    <td>${payment.Amount}</td>
+                    <td>${payment.PaidDate}</td>
+                    <td>${payment.DueDate ? payment.DueDate : 'N/A'}</td>
+                `;
+                paymentTableBody.appendChild(row);
+            });
+        }
+    })
+
+</script>

@@ -1,0 +1,330 @@
+<style>
+    #approvalRequestsContainer {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        min-height: 100vh;
+    }
+
+    /* Table styling */
+    #approvalRequestsTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #fff;
+    }
+
+    #approvalRequestsTable thead {
+        background-color: #007bff;
+        color: white;
+    }
+
+    #approvalRequestsTable th,
+    #approvalRequestsTable td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    #approvalRequestsTable tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    #approvalRequestsTable th {
+        font-weight: bold;
+    }
+
+    /* View button styling */
+    #approvalRequestsTable .viewButton {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #approvalRequestsTable .viewButton:hover {
+        background-color: #218838;
+    }
+
+    /* Modal styling */
+    #viewModal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        display: none;
+        z-index: 999;
+    }
+
+    #viewModal .modal-content {
+        margin-bottom: 20px;
+    }
+
+    #viewModal h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    #viewModal .modal-content p {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    /* Modal buttons */
+    #viewModal button {
+        padding: 10px 15px;
+        margin-right: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    #viewModal #acceptBtn {
+        background-color: #007bff;
+        color: white;
+    }
+
+    #viewModal #rejectBtn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    #viewModal #closeModal {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    /* Button hover effects */
+    #viewModal button:hover {
+        opacity: 0.8;
+    }
+    #approvalCard {
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: auto;
+        margin-top: 50px;
+        background-color: #ecf0f1;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Member Requests for Approval</h2>
+    <div id="approvalCard">
+        <div id="dynamicContent">
+            <div id="approvalRequestsSection">
+                <table id="approvalRequestsTable">
+                    <thead>
+                        <tr>
+                            <th>Approval Request ID</th>
+                            <th>Requested Member</th>
+                            <th>Approval Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be generated dynamically here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal for showing request details -->
+            <div id="viewModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <h3>Request Details</h3>
+                    <div id="requestDetails"></div>
+                    <button id="acceptBtn">Accept</button>
+                    <button id="rejectBtn">Reject</button>
+                    <button id="closeModal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const lastIdUrl = "http://localhost:7000/LastId";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const paymentsUrl = "http://localhost:7000/Payments";
+        const approvalRequestsUrl = "http://localhost:7000/ApprovalRequests";
+
+        const viewModal = document.getElementById('viewModal');
+        const requestDetailsDiv = document.getElementById('requestDetails');
+
+
+        let members = [];
+        let trainingProgramActivities = [];
+        let enrolledPrograms = [];
+        let payments = [];
+        let lastIds = [];
+        let selectedActivities = [];
+        let newlySelectedActivities = [];
+        let approvalRequests = [];
+        let currentRequest = null;
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        const approvalRequestResponse = await fetch(approvalRequestsUrl);
+        approvalRequests = await approvalRequestResponse.json();
+        populateApprovalRequestsTable();
+
+        function populateApprovalRequestsTable() {
+            const tbody = document.querySelector('#approvalRequestsTable tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            approvalRequests.forEach((request) => {
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = request.id;
+                row.appendChild(idCell);
+
+                if (request.RequestType === "newMember") {
+                    const memberCell = document.createElement('td');
+                    memberCell.textContent = `New User - ${request.MemberDetails.UserName}`;
+                    row.appendChild(memberCell);
+                } else {
+                    const member = members.find(member => member.id === request.MemberID);
+                    const memberCell = document.createElement('td');
+                    memberCell.textContent = `${request.MemberID} - ${member.UserName}`;
+                    row.appendChild(memberCell);
+                }
+
+                const typeCell = document.createElement('td');
+                typeCell.textContent = request.RequestType;
+                row.appendChild(typeCell);
+
+                const actionCell = document.createElement('td');
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.addEventListener('click', () => openModal(request));
+                actionCell.appendChild(viewButton);
+                row.appendChild(actionCell);
+
+                tbody.appendChild(row);
+            });
+        };
+
+        function openModal(request) {
+            currentRequest = request;
+            requestDetailsDiv.innerHTML = '';
+
+            Object.keys(request).forEach((key) => {
+                const detail = document.createElement('p');
+                detail.textContent = `${key}: ${JSON.stringify(request[key], null, 2)}`;
+                requestDetailsDiv.appendChild(detail);
+            });
+
+            viewModal.style.display = 'block';
+        };
+
+        document.getElementById('acceptBtn').addEventListener('click', async () => {
+            if (currentRequest) {
+                switch (currentRequest.RequestType) {
+                    case 'payment':
+                        await handlePaymentRequest(currentRequest);
+                        break;
+                    default:
+                        console.log('Other request type handling not implemented');
+                }
+                await updateRequestStatus(currentRequest, 'Accepted');
+                viewModal.style.display = 'none';
+            }
+        });
+
+        async function handlePaymentRequest(request) {
+            const paidDateString = request.PaymentDetails.PaidDate;
+            const paidDate = new Date(paidDateString);
+            const dueDate = new Date();
+            dueDate.setDate((paidDate.getDate()) + 30);
+
+            const newPayment = {
+                id: generateID("P", lastIds.PaymentID),
+                MemberID: request.MemberID,
+                PaymentType: "Monthly",
+                Amount: request.PaymentDetails.Amount,
+                PaidDate: paidDate.toISOString().split('T')[0],
+                DueDate: dueDate.toISOString().split('T')[0],
+                PaymentMethod: request.PaymentDetails.PaymentMethod
+            };
+
+            await postApi(paymentsUrl, newPayment);
+            lastIds.PaymentID++;
+            await updateLastId(lastIds);
+
+            await updateAlertStatus(request.MemberID);
+            alert("The Payment Request was Accepted");
+        };
+
+        async function updateAlertStatus(memberId) {
+            const response = await fetch(alertsUrl);
+            const alerts = await response.json();
+
+            const memberAlerts = alerts.filter(alert => alert.MemberID === memberId);
+            if (memberAlerts.length > 0) {
+                const lastAlert = memberAlerts.reduce((prev, current) => {
+                    const prevIdNum = parseInt(prev.id.slice(2), 10);
+                    const currentIdNum = parseInt(current.id.slice(2), 10);
+                    return prevIdNum > currentIdNum ? prev : current;
+                });
+
+                lastAlert.Status = false;
+                const alertUpdateRes = await putApi(alertsUrl, lastAlert.id, lastAlert);
+
+                if (alertUpdateRes.ok) (
+                    alert("payment updated")
+                )
+            }
+        };
+
+        document.getElementById('rejectBtn').addEventListener('click', async () => {
+            if (currentRequest) {
+                await updateRequestStatus(currentRequest, 'Rejected');
+                viewModal.style.display = 'none';
+            }
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            viewModal.style.display = 'none';
+        });
+
+        async function updateRequestStatus(request, newStatus) {
+            try {
+                const updatedRequest = { ...request, Status: newStatus };
+
+                const updateRequestRes = await putApi(approvalRequestsUrl, request.id, updatedRequest)
+            } catch (error) {
+                console.error('Error updating request status:', error);
+            }
+        };
+    });
+
+
+
+</script>

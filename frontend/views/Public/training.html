@@ -1,0 +1,129 @@
+<style>
+    section {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: transparent;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+h4{
+    color: #131111;
+}
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .card img {
+        max-width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .card button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .fees {
+        margin: 10px 0;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .description {
+        color: #555;
+        font-size: 14px;
+    }
+</style>
+<section>
+    <div class="container">
+        <h2>Gym Activities</h2>
+
+        <h3>Cardio</h3>
+        <div class="grid" id="cardio">
+            <div class="card">
+                <img src="/static/images/img1.jpg" alt="Running">
+                <h4>Running</h4>
+                <div class="description">An excellent way to improve cardiovascular endurance and burn calories.</div>
+                <div class="fees">Fees: Rs500/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+            <div class="card">
+                <img src="/static/images/img5.jpg" alt="Cycling">
+                <h4>Cycling</h4>
+                <div class="description">A low-impact workout for strengthening muscles and burning fat.</div>
+                <div class="fees">Fees: Rs800/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+            <div class="card">
+                <img src="/static/images/img3.jpg" alt="Aerobic">
+                <h4>Aerobic</h4>
+                <div class="description">A group-based cardio workout that builds endurance and increases stamina.</div>
+                <div class="fees">Fees: Rs500/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+        </div>
+
+        <h3>Weight Training</h3>
+        <div class="grid" id="weight-training">
+            <div class="card">
+                <img src="/static/images/img4.jpg" alt="Lifting">
+                <h4>Lifting</h4>
+                <div class="description">A strength training workout focused on muscle gain and power lifting.</div>
+                <div class="fees">Fees: Rs1500/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+            <div class="card">
+                <img src="/static/images/img2.jpg" alt="Bodybuilding">
+                <h4>Bodybuilding</h4>
+                <div class="description">Designed to build muscle mass through resistance training and diet planning.
+                </div>
+                <div class="fees">Fees: Rs2000/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+            <div class="card">
+                <img src="/static/images/img6.jpg" alt="Strength Training">
+                <h4>Strength Training</h4>
+                <div class="description">A full-body workout to improve muscle tone, balance, and stamina.</div>
+                <div class="fees">Fees: Rs1500/month</div>
+                <button class="continue-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+
+    document.querySelectorAll('.continue-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            alert("Please visit our  Near Location to Register");
+        });
+    });
+</script>
+

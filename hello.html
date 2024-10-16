@@ -1,0 +1,64 @@
+<script>
+
+    // get api 
+    await fetch(members_url)
+        .then(response => response.json())
+        .then(array => {
+            members.push(...array);
+        })
+
+    await fetch(payments_url)
+        .then(response => response.json())
+        .then(array => {
+            payments.push(...array);
+        })
+
+    await fetch(trainingPrograms_url)
+        .then(response => response.json())
+        .then(array => {
+            trainingPrograms.push(...array);
+        })
+
+    await fetch(enrollments_url)
+        .then(response => response.json())
+        .then(array => {
+            enrollments.push(...array);
+        })
+
+    await fetch(loggedinusers_url)
+        .then(response => response.json())
+        .then(array => {
+            loggedinusers.push(...array);
+        })
+
+    await fetch(overduelists_url)
+        .then(response => response.json())
+        .then(array => {
+            overduelists.push(...array);
+        })
+
+    await fetch(pendingEdits_url)
+        .then(response => response.json())
+        .then(array => {
+            pendingEdits.push(...array);
+        })
+
+    await fetch(pendingProgramEdits_url)
+        .then(response => response.json())
+        .then(array => {
+            pendingProgramEdits.push(...array);
+        })
+
+    await fetch(notifications_url)
+        .then(response => response.json())
+        .then(array => {
+            notifications.push(...array);
+        })
+        
+    await fetch(`${payments_url}?status=pending`)
+        .then(response => response.json())
+        .then(array => {
+            pending_payments.push(...array);
+        })
+
+</script>

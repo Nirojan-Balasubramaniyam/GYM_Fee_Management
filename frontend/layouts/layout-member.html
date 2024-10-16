@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css"
+        integrity="sha512-72McA95q/YhjwmWFMGe8RI3aZIMCTJWPBbV8iQY3jy1z9+bi6+jHnERuNrDPo/WGYEzzNs4WdHNyyEr/yXJ9pA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="../static/css/member-style.css">
+
+    {{style}}
+
+    <style>
+        #sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            transition: width 0.9s ease, opacity 0.1s ease-out;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-12">
+                <header>
+                    <a class="text-warning" href="/notification"><i id="notificationBtn" class="fas fa-bell"></i></a>
+                    <h1 id="greeting">Welcome, <span id="memberName"></span>!</h1>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <aside id="sidebar">
+                    <button id="toggleSidebar">&times;</button>
+                    <ul id="navItems">
+                        <li><a href="/profile" id="userInfoBtn">User Info</a></li>
+                        <li><a href="/bmi" id="bmiBtn">Calculate BMI</a></li>
+                        <li><a href="/make-payment" id="paymentBtn">Make Payment</a></li>
+                        <li><a href="/change-program" id="changeProgramsBtn">Change Programs</a></li>
+                        <li><a href="/payment-history" id="paymentHistoryBtn">Payment History</a></li>
+                        <li><a href="/change-info" id="changeInfoBtn">Change Member Information</a></li>
+                        <li><a href="/logout" id="logoutBtn">Logout</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="col-10">
+                <div class="content flex-grow-1" id="contentArea">
+                    <main> {{content}} </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const lastIdUrl = "http://localhost:7000/LastId";
+
+        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedinuser'));
+        let userName = document.getElementById('memberName');
+        userName.innerHTML = capitalizeFirstLetter(loggedInUser.UserName);
+
+        function capitalizeFirstLetter(string) {
+            return string.split('_').map(word => {
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }).join('');
+        }
+
+        async function postApi(url, arr) {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(arr)
+            });
+            return response;
+        }
+        async function putApi(url, id, arr) {
+            const response = await fetch(`${url}/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(arr)
+            });
+            return response;
+        }
+
+        async function updateLastId(arr) {
+            const response = await fetch(lastIdUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(arr)
+            });
+        }
+        async function deleteApi(url, id) {
+            await fetch(`${url}/${id}`, {
+                method: "DELETE"
+            });
+        }
+        const generateID = (prefix, lastId) => {
+            const number = lastId.toString().padStart(3, '0');
+            return `${prefix}${number}`;
+        };
+    </script>
+
+    {{script}}
+
+</body>
+
+</html>

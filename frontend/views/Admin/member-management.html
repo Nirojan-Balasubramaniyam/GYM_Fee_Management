@@ -1,0 +1,672 @@
+<style>
+    #view-members-container,
+    #member-management-container {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    #members-header,
+    #add-search-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    #members-header h2 {
+        color: darkred;
+        margin: 0;
+    }
+
+    /* Button Styling */
+    #add-new-member-button,
+    .member-management-btn,
+    .member-form .form-submit-btn {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #add-new-member-button:hover,
+    .member-management-btn:hover,
+    .member-form .form-submit-btn:hover {
+        background-color: #218838;
+    }
+
+    #search-input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 300px;
+        margin-right: 10px;
+    }
+
+    #search-button {
+        padding: 10px 20px;
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+
+    /* Table Styling */
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .member-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        overflow-y: auto;
+    }
+
+    .member-table thead th,
+    .member-table tbody td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .member-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #007bff;
+        color: white;
+        text-align: left;
+        font-weight: bold;
+        border: 1px solid #ccc;
+    }
+
+    .member-table tbody td {
+        color: #555;
+    }
+
+    .member-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .member-table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    /* Form Styling */
+    .member-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .form-input,
+    .form-select {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px 0 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-radio-group label {
+        margin-right: 15px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        margin-right: 10px;
+    }
+
+    .form-radio-group,
+    .form-checkbox-group {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0 10px 0;
+    }
+
+    .training-cardio-group,
+    .training-weighting-group {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-radio-group {
+        width: 300px;
+    }
+
+    .form-checkbox-group p {
+        font-weight: 600;
+        margin-bottom: 0px;
+    }
+
+    /* Modal Styling */
+    /* Modal styles */
+    .member-modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        /* Prevent scroll outside the modal */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Black background with opacity */
+    }
+
+    /* Modal content */
+    .member-modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 0px 20px 20px 20px;
+        border: 1px solid #888;
+        width: 50%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        position: relative;
+        left: 100px;
+        top: -90px;
+    }
+
+    /* Close button */
+    .closeBtn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .closeBtn:hover,
+    .closeBtn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Make modal fixed on screen, but form scrollable */
+    /* .member-form {
+        max-height: 500px;
+        overflow-y: auto;
+    } */
+    .modal-header {
+        display: block;
+        padding: 15px;
+        position: sticky;
+        background-color: white;
+        top: 0;
+        z-index: 1;
+        width: 100%;
+    }
+
+    .modal-title {
+        font-weight: 700;
+    }
+
+    .member-modal-content h2 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-radio-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-submit-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .form-submit-btn:hover {
+        background-color: #218838;
+    }
+
+
+    /* Table Actions */
+    .member-table-actions {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .member-table-actions button {
+        padding: 5px 10px;
+        font-size: 15px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background-color: #008CBA;
+        color: white;
+        border: none;
+    }
+
+    .delete-btn {
+        background-color: #f44336;
+        color: white;
+        border: none;
+    }
+
+    .edit-btn:hover {
+        background-color: #005f5f;
+    }
+
+    .delete-btn:hover {
+        background-color: #e31e10;
+    }
+
+    #memberManageCard {
+        margin-top: 40px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: auto;
+        /* padding: 20px; */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .member-modal-content {
+        z-index: 2000;
+        /* Ensure modal content is on top */
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Member Management</h2>
+    <div id="dynamicContent">
+        <div id="memberManageCard">
+            <div id="member-management-container">
+                <button id="openAddMemberModal" class="member-management-btn">Add New Member</button>
+                <div class="table-container">
+                    <table id="memberTable" class="member-table table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Member Name</th>
+                                <th>Contact Number</th>
+                                <th>Training Plans</th>
+                                <th>Payment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="memberModal" class="member-modal">
+                <div class="member-modal-content">
+                    <div class="modal-header">
+                        <span class="closeBtn">&times;</span>
+                        <h2 id="modal-title" class="modal-title">Add Member</h2>
+                    </div>
+                    <form id="memberForm" class="member-form">
+                        <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">User Name:</label>
+                            <input type="text" id="username" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="nic">NIC Number:</label>
+                            <input type="text" id="nic" class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label for="mobileNumber">Mobile Number:</label>
+                            <input type="text" id="mobileNumber" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth:</label>
+                            <input type="date" id="dob" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select id="gender" class="form-select" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Initial Payment:</label>
+                            <div class="form-radio-group">
+                                <label><input type="radio" name="initialPayment" value="Cash" required /> Cash</label>
+                                <label><input type="radio" name="initialPayment" value="Bank" required />
+                                    Bank(Card)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyContactName">Emergency Contact Name:</label>
+                            <input type="text" id="emergencyContactName" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyContactNumber">Emergency Contact Mobile Number:</label>
+                            <input type="text" id="emergencyContactNumber" class="form-input" required />
+                        </div>
+
+                        <div id="paymentSummary" class="payment-summary">
+                            <p>Initial Payment: Rs 2500.00 <span id="initialPaymentDisplay"></span></p>
+                        </div>
+
+                        <button type="submit" id="saveMemberBtn" class="form-submit-btn">Add Member</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const usersUrl = "http://localhost:7000/Users";
+        const membersUrl = "http://localhost:7000/Members";
+        const lastIdUrl = "http://localhost:7000/LastId";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const paymentsUrl = "http://localhost:7000/Payments";
+
+        let members = [];
+        let trainingProgramActivities = [];
+        let enrolledPrograms = [];
+        let payments = [];
+        let lastIds = [];
+        let editingMemberId = null;
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        console.log(lastIds)
+
+        displayMembers();
+
+        function displayMembers() {
+            const memberTableBody = document.querySelector('#memberTable tbody');
+            memberTableBody.innerHTML = "";
+
+            members.forEach(member => {
+                const memberId = member.id;
+                const loggedInUserPrograms = enrolledPrograms.filter(program => program.MemberID === memberId);
+                const monthlyPayment = payments.find(payment => payment.MemberID === memberId && payment.PaymentType === "Monthly");
+                const cardioPrograms = generateListItems(loggedInUserPrograms, trainingProgramActivities, "P001");
+                const weightTrainingPrograms = generateListItems(loggedInUserPrograms, trainingProgramActivities, "P002");
+                const programList = `
+                            <ul>
+                                <b>Cardio</b>
+                                <ul>${cardioPrograms}</ul>
+                                <b>Weight Training</b>
+                                <ul>${weightTrainingPrograms}</ul>
+                            </ul>`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${member.id}</td>
+                            <td>${member.FirstName} ${member.LastName}</td>
+                            <td>${member.Phone}</td>
+                            <td>${programList}</td>
+                            <td>Rs ${monthlyPayment ? monthlyPayment.Amount : 'N/A'}</td>
+                            <td>
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Delete</button>
+                            </td>`;
+
+                const editBtn = row.querySelector('.edit-btn');
+                const deleteBtn = row.querySelector('.delete-btn');
+                editBtn.addEventListener('click', () => editMember(member.id));
+                deleteBtn.addEventListener('click', () => deleteMember(member.id));
+
+                memberTableBody.appendChild(row);
+            });
+        };
+
+        function generateListItems(programs, activities, typeId) {
+            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+
+            if (filteredPrograms.length === 0) {
+                return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
+            }
+
+            return filteredPrograms.map(program => {
+                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                return activity ? activity.ActivityName : 'No matching activity';
+            }).join(', ');
+        };
+
+        async function deleteMember(memberId) {
+            if (confirm("Are you sure you want to delete this member?")) {
+                const enrolledProgramsResponse = await fetch(`${enrolledTrainingProgramsUrl}?MemberID=${memberId}`);
+                const enrolledPrograms = await enrolledProgramsResponse.json();
+
+                if (enrolledPrograms.length > 0) {
+                    for (const enrolledProgram of enrolledPrograms) {
+                        await deleteApi(enrolledTrainingProgramsUrl, enrolledProgram.id);
+                    }
+                }
+
+                await deleteApi(membersUrl, memberId);
+                await deleteApi(usersUrl, memberId);
+
+                alert("Member and related programs deleted successfully.");
+                location.reload(); 
+            }
+        }
+
+
+        function editMember(memberId) {
+            const memberToEdit = members.find(member => member.id === memberId);
+
+            if (memberToEdit) {
+                document.getElementById('firstName').value = memberToEdit.FirstName;
+                document.getElementById('lastName').value = memberToEdit.LastName;
+                document.getElementById('username').value = memberToEdit.UserName;
+                document.getElementById('nic').value = memberToEdit.NIC;
+                document.getElementById('mobileNumber').value = memberToEdit.Phone;
+                document.getElementById('dob').value = memberToEdit.DoB;
+                document.getElementById('gender').value = memberToEdit.Gender;
+                document.getElementById('address').value = memberToEdit.Adress;
+                document.getElementById('emergencyContactName').value = memberToEdit.EmergencyContactPrsn;
+                document.getElementById('emergencyContactNumber').value = memberToEdit.EmergencyContact;
+
+                document.querySelector('.form-radio-group').style.display = 'none';
+                document.getElementById('saveMemberBtn').textContent = "Edit Member";
+                document.getElementById('modal-title').textContent = "Edit Member";
+                document.getElementById('modal-title').style.color = "orangered";
+                editingMemberId = memberId;
+                document.getElementById('memberModal').style.display = 'block';
+
+                document.querySelectorAll('input[name="initialPayment"]').forEach(input => {
+                    input.required = false;
+                });
+            }
+        };
+
+        document.getElementById('memberForm').addEventListener('submit', async event => {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('username').value;
+            const nic = document.getElementById('nic').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const address = document.getElementById('address').value;
+            const emergencyContactName = document.getElementById('emergencyContactName').value;
+            const emergencyContactNumber = document.getElementById('emergencyContactNumber').value;
+            const initialPaymentMethod = document.querySelector('input[name="initialPayment"]:checked').value;
+
+            if (editingMemberId) {
+                const updatedMember = {
+                    id: editingMemberId,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    UserName: username,
+                    NIC: nic,
+                    Phone: mobileNumber,
+                    DoB: dob,
+                    Gender: gender,
+                    Adress: address,
+                    EmergencyContactPrsn: emergencyContactName,
+                    EmergencyContact: emergencyContactNumber,
+                };
+
+                const updateUser = {
+                    id: editingMemberId,
+                    MemberID: editingMemberId,
+                    UserName: username,
+                    Password: mobileNumber,
+                    UserRoll: "member"
+                };
+
+                const memberUpdateResponse = await putApi(membersUrl, editingMemberId, updatedMember);
+                console.log(memberUpdateResponse)
+
+                const userUpdateresponse = await putApi(usersUrl, editingMemberId, updateUser);
+                console.log(userUpdateresponse)
+
+                if (memberUpdateResponse && userUpdateresponse) {
+                    alert("Member updated successfully!");
+                    document.getElementById('memberForm').reset();
+                    document.getElementById('memberModal').style.display = 'none';
+                    document.getElementById('saveMemberBtn').textContent = "Add Member";
+                    document.getElementById('modal-title').textContent = "Add Member";
+                    editingMemberId = null;
+                    location.reload();
+                } else {
+                    alert("Failed to update member.");
+                }
+            } else {
+                const newMemberId = generateID("M", lastIds.MemberId);
+                const newPaymentId = generateID("P", lastIds.PaymentID);
+
+                const newMember = {
+                    id: newMemberId,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    UserName: username,
+                    NIC: nic,
+                    Phone: mobileNumber,
+                    DoB: dob,
+                    Gender: gender,
+                    Adress: address,
+                    EmergencyContact: emergencyContactNumber,
+                    EmergencyContactPrsn: emergencyContactName,
+                };
+
+                const newPayment = {
+                    id: newPaymentId,
+                    MemberID: newMemberId,
+                    PaymentType: "Initial",
+                    Amount: 2500,
+                    PaymentMethod: initialPaymentMethod,
+                    PaidDate: new Date().toISOString().split('T')[0],
+                    DueDate: null,
+                };
+
+                const newUser = {
+                    id: newMemberId,
+                    MemberID: newMemberId,
+                    UserName: username,
+                    Password: mobileNumber,
+                    UserRoll: "member"
+                }
+
+                const addMemberRes = await postApi(membersUrl, newMember)
+                const addUserRes = await postApi(usersUrl, newUser)
+                const addPaymentRes = await postApi(paymentsUrl, newPayment)
+
+                if (addMemberRes.ok && addUserRes.ok && addPaymentRes.ok) {
+                    alert("Member and payment added successfully!");
+                    lastIds.MemberId++;
+                    lastIds.PaymentID++;
+                    await updateLastId(lastIds);
+                    closeModal();
+                } else {
+                    alert("Failed to add member or payment.");
+                }
+
+            }
+        });
+
+        function openModal() {
+            document.getElementById('memberForm').reset();
+            document.querySelector('.form-radio-group').style.display = 'block';
+            document.getElementById('saveMemberBtn').textContent = "Add Member";
+            document.getElementById('modal-title').textContent = "Add Member";
+            document.getElementById('modal-title').style.color = "green";
+            document.querySelectorAll('input[name="initialPayment"]').forEach(input => {
+                input.required = true;
+            });
+            document.getElementById('memberModal').style.display = 'block';
+        };
+
+        function closeModal() {
+            document.getElementById('memberModal').style.display = 'none';
+        };
+
+        document.getElementById('openAddMemberModal').addEventListener('click', openModal);
+        document.querySelector('.closeBtn').addEventListener('click', closeModal);
+    })
+
+</script>

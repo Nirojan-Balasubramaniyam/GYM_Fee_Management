@@ -1,0 +1,271 @@
+<style>
+    #payment-container {
+        display: flex;
+        justify-content: space-between;
+        /* width: 90%;
+        margin: 20px auto;
+        padding: 20px; */
+    }
+
+    #backDashboardBtn:hover {
+        background-color: darkgreen;
+    }
+
+    #searchUserInput,
+    #paymentAmountInput {
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 300px;
+    }
+
+    #searchUserBtn {
+        padding: 5px 20px;
+        background-color: #005f73;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    #payment-method-container {
+        margin-top: 20px;
+    }
+
+    #payment-method-container h2,
+    .member-management-title {
+        color: #005f73;
+        font-size: 30px;
+    }
+
+    #payment-method-container label {
+        display: block;
+        margin: 10px 0;
+    }
+
+    #payment-header {
+        margin-top: 20px;
+    }
+
+    #addPaymentBtn {
+        display: block;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    #addPaymentBtn:hover {
+        background-color: #218838;
+    }
+
+    #member-details-container {
+        margin: 20px auto;
+        width: 800px;
+        border: 1px solid #005f73;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #trainingProgramsDisplay,
+    #member-details-container p {
+        margin: 15px 0;
+    }
+
+    #trainingProgramsDisplay {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #paymentCard {
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: auto;
+        margin-top: 50px;
+        background-color: #ecf0f1;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<section id="content">
+    <h2 id="contentTitle">Payments</h2>
+    <div id="paymentCard">
+        <div id="payment-container">
+
+
+            <div id="payment-method-container">
+                <form>
+                    <input type="number" id="paymentAmountInput" placeholder="Enter payment amount">
+                    <label>Select payment method</label>
+                    <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
+                    <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
+                    <button type="button" id="addPaymentBtn">Add Payment</button>
+                </form>
+            </div>
+
+            <div id="payment-header">
+                <input type="text" id="searchUserInput" placeholder="Enter member user id/ NIC">
+                <button id="searchUserBtn">Search</button>
+            </div>
+
+        </div>
+
+        <div id="member-details-container">
+            <div>
+                <p>User name : <span id="userName"></span></p>
+                <p>User ID : <span id="userID"></span></p>
+                <p>Total Payment : <span id="totalPayment"></span></p>
+                <p>Last paid date : <span id="lastPaidDate"></span></p>
+                <p>Due Date : <span id="dueDate"></span></p>
+            </div>
+            <div class="member-training-program">
+                <p>Training programs :
+                <div id="trainingProgramsDisplay">
+
+                </div>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const paymentsUrl = "http://localhost:7000/Payments";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const lastIdUrl = "http://localhost:7000/LastId";
+
+        let members = [];
+        let enrolledPrograms = [];
+        let trainingProgramActivities = [];
+        let payments = [];
+        let lastIds = [];
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        document.getElementById('searchUserBtn').addEventListener('click', () => {
+            const searchValue = document.getElementById('searchUserInput').value.toLowerCase();
+            const searchedMember = members.find(member =>
+                member.id.toLowerCase() === searchValue ||
+                member.NIC.toLowerCase() === searchValue ||
+                member.UserName.toLowerCase() === searchValue
+            );
+
+            if (searchedMember) {
+                displayMemberDetails(searchedMember);
+            } else {
+                alert("Member not found.");
+            }
+        });
+
+        function displayMemberDetails(member) {
+            document.getElementById('userName').textContent = `${member.FirstName} ${member.LastName}`;
+            document.getElementById('userID').textContent = member.id;
+
+            const memberPrograms = enrolledPrograms.filter(program => program.MemberID === member.id);
+            const memberPayments = payments.filter(payment => payment.MemberID === member.id && payment.PaymentType === "Monthly");
+
+            if (memberPayments.length === 0) {
+                alert("Please enroll training programs for MemberID = " + member.id);
+                return;
+            }
+
+            const cardioPrograms = generateListItems(memberPrograms, trainingProgramActivities, "P001");
+            const weightTrainingPrograms = generateListItems(memberPrograms, trainingProgramActivities, "P002");
+
+            document.getElementById('trainingProgramsDisplay').innerHTML = `
+                                                                    <ul>
+                                                                        <b>Cardio</b>
+                                                                        <ul>${cardioPrograms}</ul>
+                                                                        <b>Weight Training</b>
+                                                                        <ul>${weightTrainingPrograms}</ul>
+                                                                    </ul>
+                                                                `;
+
+            const totalPayment = memberPrograms.reduce((total, program) => {
+                const activity = trainingProgramActivities.find(activity => activity.ActivittID === program.ActivittID);
+                return total + (activity ? activity.Cost : 0);
+            }, 0);
+            document.getElementById('totalPayment').textContent = `Rs ${totalPayment}`;
+
+            if (memberPayments.length > 0) {
+                const lastPayment = memberPayments.sort((a, b) => new Date(b.PaidDate) - new Date(a.PaidDate))[0];
+                document.getElementById('lastPaidDate').textContent = lastPayment.PaidDate;
+                document.getElementById('dueDate').textContent = lastPayment.DueDate || 'N/A';
+            } else {
+                document.getElementById('lastPaidDate').textContent = 'No payments found';
+                document.getElementById('dueDate').textContent = 'N/A';
+            }
+        };
+
+        function generateListItems(programs, activities, typeId) {
+            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+
+            if (filteredPrograms.length === 0) {
+                return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
+            }
+            return filteredPrograms
+                .map(program => {
+                    const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                    return activity ? activity.ActivityName : 'No matching activity';
+                })
+                .join(', ');
+        };
+
+        document.getElementById('addPaymentBtn').addEventListener('click', async (event) => {
+            console.log("Add Payment button clicked");
+            event.preventDefault();
+            const memberId = document.getElementById('userID').textContent;
+            const paymentAmount = document.getElementById('paymentAmountInput').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            if (!memberId || !paymentAmount) {
+                alert("Please select a member and enter a payment amount.");
+                return;
+            }
+
+            const paidDate = new Date();
+            const dueDate = new Date();
+            dueDate.setDate(paidDate.getDate() + 30);
+
+            const newPayment = {
+                id: generateID("P", lastIds.PaymentID),
+                MemberID: memberId,
+                PaymentType: "Monthly",
+                Amount: Number(paymentAmount),
+                PaidDate: paidDate.toISOString().split('T')[0],
+                DueDate: dueDate.toISOString().split('T')[0],
+                PaymentMethod: paymentMethod
+            };
+
+            const addPaymentResponse = await postApi(paymentsUrl,newPayment);
+
+            if (addPaymentResponse.ok) {
+                lastIds.PaymentID++;
+                await updateLastId(lastIds);
+                alert("Payment added successfully!");
+            } else {
+                alert("Failed to add payment.");
+            }
+        });
+    })
+</script>

@@ -1,0 +1,171 @@
+<style>
+  #programReportContainer {
+    max-height: 100vh;
+    height: 600px;
+    width: 90%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  #programReportTitle {
+    color: #d32f2f;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  #programReportTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+  }
+
+  #programReportTable th,
+  #programReportTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  .programHeader {
+    background-color: #1abc9c;
+    color: white;
+    text-align: center;
+  }
+
+  .percentageHeader {
+    background-color: #ff9800;
+    color: white;
+    text-align: center;
+  }
+
+  #programReportTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  #programReportTable tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+
+
+  #programReportCard {
+    margin-top: 50px;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
+<section id="content">
+  <h2 id="contentTitle">Training Programs Report</h2>
+  <div id="dynamicContent">
+    <div id="programReportCard">
+      <div id="programReportContainer">
+        <table id="programReportTable">
+          <thead>
+            <tr>
+              <th class="programHeader">Training Programs</th>
+              <th class="percentageHeader">Accessing Users Percentage</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const membersUrl = 'http://localhost:7000/Members';
+    const enrolledProgramsUrl = 'http://localhost:7000/EnrolledTrainingPrograms';
+    const activitiesUrl = 'http://localhost:7000/TrainingProgramActivities';
+    let members = [];
+    let enrolledPrograms = [];
+    let trainingActivities = [];
+
+    const memberResponse = await fetch(membersUrl);
+    members = await memberResponse.json();
+
+    const enrolledResponse = await fetch(enrolledProgramsUrl);
+    enrolledPrograms = await enrolledResponse.json();
+
+    const activitiesResponse = await fetch(activitiesUrl);
+    trainingProgramActivities = await activitiesResponse.json();
+
+    const displayProgramReport = () => {
+      const totalMembers = members.length;
+      const tbody = document.querySelector('#programReportTable tbody');
+      tbody.innerHTML = '';
+
+      const selectedMembers = [...new Set(enrolledPrograms.map(program => program.MemberID))];
+      const selectedMembersPercentage = ((selectedMembers.length / totalMembers) * 100).toFixed(0);
+
+      const cardioMembers = enrolledPrograms.filter(program => program.ProgramTypeID === 'P001');
+      const weightTrainingMembers = enrolledPrograms.filter(program => program.ProgramTypeID === 'P002');
+
+      const cardioPercentage = ((cardioMembers.length / selectedMembers.length) * 100).toFixed(0);
+      const weightTrainingPercentage = ((weightTrainingMembers.length / selectedMembers.length) * 100).toFixed(0);
+
+      tbody.innerHTML += `
+            <tr>
+                <td>Total Members</td>
+                <td>${totalMembers}</td>
+            </tr>
+            <tr>
+                <td>Training Program Selected Members</td>
+                <td>${selectedMembers.length} Memebers (${selectedMembersPercentage}%)</td>
+            </tr>
+            <tr>
+                <td>Cardio</td>
+                <td>${cardioMembers.length} Memebers (${cardioPercentage}%)</td>
+            </tr>
+            <tr>
+                <td>Weight Training</td>
+                <td>${weightTrainingMembers.length} Memebers (${weightTrainingPercentage}%)</td>
+            </tr>
+        `;
+
+      const cardioSubPrograms = ['Running', 'Cycling', 'Aerobic'];
+      cardioSubPrograms.forEach(subProgram => {
+        const activityId = getActivityId(subProgram);
+        const subProgramMembers = cardioMembers.filter(program => program.ActivittID === activityId);
+        const subProgramPercentage = ((subProgramMembers.length / cardioMembers.length) * 100).toFixed(0);
+
+        tbody.innerHTML += `
+                <tr>
+                    <td>${subProgram}</td>
+                    <td>${subProgramMembers.length} Memebers (${subProgramPercentage}%)</td>
+                </tr>
+            `;
+      });
+
+      const weightTrainingSubPrograms = ['Body Shaping', 'Strength Training', 'Body Building'];
+      weightTrainingSubPrograms.forEach(subProgram => {
+        const activityId = getActivityId(subProgram);
+        const subProgramMembers = weightTrainingMembers.filter(program => program.ActivittID === activityId);
+        const subProgramPercentage = ((subProgramMembers.length / weightTrainingMembers.length) * 100).toFixed(0);
+
+        tbody.innerHTML += `
+                <tr>
+                    <td>${subProgram}</td>
+                    <td>${subProgramMembers.length} Memebers (${subProgramPercentage}%)</td>
+                </tr>
+            `;
+      });
+    };
+
+    const getActivityId = (subProgramName) => {
+      const activity = trainingActivities.find(activity => activity.ActivityName.toLowerCase() === subProgramName.toLowerCase());
+      return activity ? activity.ActivittID : null;
+    };
+
+    displayProgramReport();
+  })
+</script>

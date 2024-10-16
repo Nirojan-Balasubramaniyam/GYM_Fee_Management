@@ -1,0 +1,151 @@
+<style>
+    #userInfo {
+        margin: 20px auto;
+        border-collapse: collapse;
+        font-size: 18px;
+        /* margin: 20px auto; */
+        background-color: white;
+        border-radius: 5px;
+        width: 95%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #userInfo thead th {
+        padding: 10px;
+        text-align: left;
+        vertical-align: middle;
+        color: #0c2a48;
+    }
+
+    #userInfo tbody td {
+        padding: 8px;
+        text-align: left;
+        vertical-align: middle;
+        color: #2c3e50;
+    }
+
+    #userInfo tbody tr:hover {
+        background-color: #e0f7fa;
+        transform: scale(1.005);
+        transition: all 0.2s ease-in-out;
+    }
+
+    #profileCard {
+        margin-top: 10px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
+<section id="content">
+    <h2 id="contentTitle">Profile</h2>
+    <div id="profileCard">
+        <div class="row">
+            <div class="col-12">
+                <table id="userInfo">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>NIC Number</th>
+                            <th>Mobile Number ID</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody> </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 user"> </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+
+        let members = [];
+        let trainingProgramActivities = [];
+        let enrolledPrograms = [];
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const trainingProgramResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await trainingProgramResponse.json();
+
+        const enrolledTrainingResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledTrainingResponse.json();
+
+        let loggedinMember = members.find(member => member.id === loggedInUser.id);
+        console.log(loggedInUser.id);
+        console.log(loggedinMember.id);
+
+        const loggedInUserPrograms = enrolledPrograms.filter(program => program.MemberID === loggedInUser.id);
+
+        displayTrainingPrograms(loggedInUserPrograms);
+        displayMemberTable(loggedinMember);
+
+        function displayMemberTable(loggedinMember) {
+            const userTableBody = document.querySelector("#userInfo tbody");
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${loggedinMember.id}</td>
+            <td>${loggedinMember.FirstName}</td>
+            <td>${loggedinMember.LastName}</td>
+            <td>${loggedinMember.NIC}</td>
+            <td>${loggedinMember.Phone}</td>
+            <td>${loggedinMember.RegistrationDate}</td>
+        `;
+            userTableBody.appendChild(row);
+        };
+
+        function displayTrainingPrograms(loggedInUserPrograms) {
+            const grid = document.querySelector('.user');
+            const imgDiv = document.createElement('div');
+            imgDiv.innerHTML = `<img src="../../static/images/user-avatar-male-5.png" alt="" width="200px">`;
+
+            const trainingProgramGrid = document.createElement('div');
+            trainingProgramGrid.className = "card";
+
+            trainingProgramGrid.innerHTML = `
+                
+                <p>${loggedinMember.FirstName} ${loggedinMember.LastName}'s Enrolled Programs: </p>
+                <ul>
+                    <p>Cardio</p>
+                    <ul>${generateListItems(loggedInUserPrograms, trainingProgramActivities, "P001")}</ul>
+                    <p>Weight Training</p>
+                    <ul>${generateListItems(loggedInUserPrograms, trainingProgramActivities, "P002")}</ul>
+                </ul>
+            `;
+            grid.appendChild(imgDiv);
+            grid.appendChild(trainingProgramGrid);
+        };
+
+        function generateListItems(programs, activities, typeId) {
+            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+            if (filteredPrograms.length === 0) {
+                return typeId === "P001" ? '<li>No cardio programs enrolled</li>' : '<li>No weight training programs enrolled</li>';
+            }
+
+            return filteredPrograms
+                .map(program => {
+                    const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                    return activity ? `<li>Activity: ${activity.ActivityName}</li>` : '<li>No matching activity</li>';
+                })
+                .join('');
+        };
+    })
+
+</script>

@@ -1,0 +1,183 @@
+<style>
+    #dashboardCard {
+        margin-top: 40px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: hidden;
+        /* padding: 20px; */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .grid-container {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 10px 20px;
+        margin-top: 10px;
+    }
+
+    .graph-img {
+        width: 30%;
+        margin-top: -50px;
+    }
+
+    .badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 250px;
+        background: white;
+        color: black;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 24px;
+        border: 20px solid #005f73;
+    }
+
+    .notification-container {
+        padding: 0px 20px;
+        max-height: 400px;
+        height: 300px;
+        overflow-y: auto;
+    }
+
+    #income {
+        color: green;
+        border-color: green;
+    }
+
+    #overdue {
+        color: red;
+        border-color: red;
+    }
+
+    #adminNotificationTable {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    #adminNotificationTable th,
+    #notification-table td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    #adminNotificationTable th {
+        background-color: #aba5a5;
+        color: red;
+        font-size: 20px;
+    }
+
+    #adminNotificationTable thead {
+        position: sticky;
+        top: 0;
+    }
+
+    #adminNotificationTable td {
+        border-bottom: 1px solid black;
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    #currentDate{
+        color: black;
+        position: relative;
+        left: 650px;
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Dash Board</h2>
+    <div id="dashboardCard">
+        <div class="admin-info"></div>
+        <div class="grid-container">
+            <div class="badge" id="income"></div>
+            <div class="badge" id="overdue"></div>
+        </div>
+
+        <div class="notification-container">
+            <table border="1" id="adminNotificationTable">
+                <thead>
+                    <tr>
+                        <th colspan="3">Overdue Notifications <span id="currentDate"></span></th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const paymentsUrl = "http://localhost:7000/Payments";
+        const alertsUrl = "http://localhost:7000/Alerts";
+        let currentDate = document.getElementById("currentDate");
+        let payments = [];
+        let alerts = [];
+        let totalIncome = 0;
+        let totalOverdue = 0;
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const alertResponse = await fetch(alertsUrl);
+        alerts = await alertResponse.json();
+        console.log(payments);
+
+        time = new Date();
+        console.log(time)
+        currentDate.innerHTML =`Current Date: ${time.toLocaleDateString('en-GB')}`;
+
+        displayIncomeOverdue();
+        displayNotifications();
+
+        function displayIncomeOverdue() {
+            payments.forEach(payment => {
+                if (payment.PaymentType === "Initial" || payment.PaymentType === "Monthly") {
+                    totalIncome += payment.Amount;
+                }
+            });
+
+            alerts.forEach(alert => {
+                if (alert.AlertType === "overdue" && alert.Status === true) {
+                    totalOverdue += alert.Amount;
+                }
+            });
+
+            const overdueDiv = document.getElementById("overdue");
+            const incomeDiv = document.getElementById("income");
+            console.log(totalIncome);
+
+            incomeDiv.innerHTML = `Total<br> Revenue<br><br><br>Rs${totalIncome}`;
+            overdueDiv.innerHTML = `Total<br> Overdue<br><br><br>Rs${totalOverdue}`;
+        };
+
+        function displayNotifications() {
+            const notificationTable = document.getElementById("adminNotificationTable");
+            alerts.forEach(alert => {
+                if (alert.AlertType === "overdue" && alert.Status === true) {
+                    const row = document.createElement("tr");
+                    const overdueCell = document.createElement("td");
+                    overdueCell.textContent = `Member ID ${alert.MemberID} has overdue payment - Rs${alert.Amount} | Due Date - ${alert.DueDate}`;
+                    row.appendChild(overdueCell);
+                    notificationTable.appendChild(row);
+                }
+            });
+
+            if (totalOverdue === 0) {
+                const noNotificationRow = document.createElement("tr");
+                const noNotificationCell = document.createElement("td");
+                noNotificationCell.textContent = "You don't have any overdue notifications.";
+                noNotificationCell.setAttribute("colspan", "3");
+                noNotificationRow.appendChild(noNotificationCell);
+                notificationTable.appendChild(noNotificationRow);
+            }
+        };
+
+    })
+
+</script>

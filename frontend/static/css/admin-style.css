@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  max-height: 100vh;
+  /* overflow-y: hidden; */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+}
+#greeting {
+  /* background-color: #2c3e50; */
+  color: #2c3e50;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+}
+#content {
+  overflow-y: hidden;
+  padding: 20px;
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+aside{
+  overflow-y: hidden;
+}
+
+/* aside {
+  background-color: #2c3e50;
+  width: 250px;
+  position: relative;    
+  min-height: 100vh;
+  padding-top: 0px;
+  transition: width 0.3s;
+} */
+
+#navItems {
+  list-style-type: none;
+  position: relative;
+  min-height: 100vh;
+  padding: 0px;
+}
+
+#navItems li {
+  margin: 10px 0;
+}
+
+#navItems li a {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+#navItems li a:hover {
+  background-color:white;
+  color: #1abc9c;
+}
+#logoutBtn{
+  background-color: red;
+  color: white;
+  font-weight: 800;
+  position: absolute;
+  top: 640px;
+  left: 0px;
+  width: 250px;
+  margin: 0px;  
+}
+#logoutBtn:hover{
+  background-color: white;
+  color: red;
+}
+
+/* button {
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+} */
+.light-green {
+  background-color: #1abc9c;
+  color: white;
+}
+
+.dark-green {
+  background-color: white;
+  color: rgb(4, 72, 59);
+}
+
+#toggleSidebar {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 15px;
+  text-align: center;
+  font-size: 30px;
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  transition: transform 0.3s;
+  width: 50px;
+}
+
+#sidebar.minimized {
+  width: 70px;
+}
+
+#sidebar.minimized #navItems {
+  display: none;
+}
+.dropdown-buttons{
+  display: none;
+  flex-direction: column;
+}
+.reportDropdownShow {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  top: -200px;
+  left: 20px;
+  width: 200px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+#contentTitle{
+  position: fixed;
+  top: 10px;
+  padding-bottom: 50px;
+}

@@ -1,0 +1,155 @@
+<style>
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #34495e;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #1abc9c;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1abc9c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #16a085;
+    }
+
+    #changeInfoCard {
+        margin-top: 10px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 500px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 20px;
+        border-radius: 10px;
+        /* width: 100%; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Change PErsonal Information</h2>
+    <div id="changeInfoCard">
+        <div class="row">
+            <div class="col-12">
+                <div id="memberInfoCard" class="member-info-card-unique">
+
+                    <form id="memberForm" class="member-form-unique">
+                        <label for="firstName" class="form-label-unique">First Name:</label>
+                        <input type="text" id="firstName" class="input-field-unique" placeholder="Enter First Name">
+
+                        <label for="lastName" class="form-label-unique">Last Name:</label>
+                        <input type="text" id="lastName" class="input-field-unique" placeholder="Enter Last Name">
+
+                        <label for="phone" class="form-label-unique">Phone:</label>
+                        <input type="text" id="phone" class="input-field-unique" placeholder="Enter Phone Number">
+
+                        <label for="nic" class="form-label-unique">NIC:</label>
+                        <input type="text" id="nic" class="input-field-unique" placeholder="Enter NIC">
+
+                        <!-- <button type="button" id="saveButton" class="btn-unique">Save Changes</button> -->
+                    </form>
+
+                    <button type="button" id="changeInfoButton" class="btn-unique">Change Info</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const approvalRequestsUrl = "http://localhost:7000/ApprovalRequests";
+        const lastIdUrl = "http://localhost:7000/LastId";
+
+        let members = [];
+        let approvalRequests = [];
+        let lastIds = [];
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        const approvalResponse = await fetch(approvalRequestsUrl);
+        approvalRequests = await approvalResponse.json();
+
+        const member = members.find(member => member.id === loggedInUser.id);
+        if (member) {
+            document.getElementById('firstName').value = member.FirstName;
+            document.getElementById('lastName').value = member.LastName;
+            document.getElementById('phone').value = member.Phone;
+            document.getElementById('nic').value = member.NIC;
+        }
+
+        document.getElementById('changeInfoButton').addEventListener('click', async () => {
+            //fetchLastId();
+            let lastApprovalId = lastIds.ApprovalRequestID;
+
+            const generateID = () => {
+                const prefix = "AR";
+                const number = lastApprovalId.toString().padStart(3, '0');
+                lastApprovalId++;
+                lastIds.ApprovalRequestID = lastApprovalId;
+                updateLastId(lastIds);
+                return prefix + number;
+            };
+
+            const updateLastId = async (updatedLastIds) => {
+                try {
+                    await fetch(`${lastIdUrl}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedLastIds)
+                    });
+                } catch (error) {
+                    console.error("Error updating LastId:", error);
+                }
+            };
+
+            const newApprovalRequest = {
+                id: generateID(),
+                RequestType: "memberInfoChange",
+                MemberID: loggedInUser.id,
+                NewEnrollProgramIDDetails: {
+                    FirstName: document.getElementById('firstName').value,
+                    LastName: document.getElementById('lastName').value,
+                    Phone: document.getElementById('phone').value,
+                    NIC: document.getElementById('nic').value,
+                },
+                Status: "Pending"
+            };
+
+            const postResponse = await fetch(approvalRequestsUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newApprovalRequest)
+            });
+
+            alert('Your information change request has been sent to admin for approval!');
+        });
+    })
+</script>

@@ -1,0 +1,594 @@
+<style>
+    #enrollment-container {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #trainingProgramSelection {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #cardioSection,
+    #weightTrainingSection {
+        width: 40%;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #trainingProgramSelection h3 {
+        text-align: center;
+    }
+
+    #enrollment-container .form-group {
+        margin-bottom: 15px;
+    }
+
+    #addProgramsBtn {
+        display: block;
+        margin: 0 auto;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    #addProgramsBtn :hover {
+        background-color: #218838;
+    }
+
+    #cardioPrograms,
+    #weightPrograms {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    #programEnrollPaymentForm {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    #memberSelect,
+    #monthsSelect {
+        width: 200px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid green;
+    }
+
+    .selection-form-group {
+        display: flex;
+        justify-content: space-around;
+        width: 500px;
+        margin-bottom: 20px;
+    }
+
+    #monthsSelect {
+        position: relative;
+    }
+
+    #enrollProgramCard {
+        max-height: 100vh;
+        height: 600px;
+        overflow-y: auto;
+        margin-top: 50px;
+        background-color: #ecf0f1;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .program-checkbox {
+        margin: 0px 20px 0px 100px;
+        transform: scale(1.5);
+    }
+
+    #trainingProgramSelection h3 {
+        color: #218838;
+        font-weight: 800;
+    }
+
+    .program-checkbox-label {
+        font-weight: 530;
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Enroll Programs</h2>
+    <div id="dynamicContent">
+        <div id="enrollProgramCard">
+
+
+            <div class="selection-form-group">
+                <div>
+                    <select id="memberSelect" class="form-input">
+                    </select>
+                </div>
+
+                <div>
+                    <select id="monthsSelect" class="form-input">
+                    </select>
+                </div>
+            </div>
+
+            <div id="trainingProgramSelection">
+                <div id="cardioSection">
+                    <h3>Cardio Programs</h3>
+                    <div id="cardioPrograms">
+                    </div>
+                </div>
+
+                <div id="weightTrainingSection">
+                    <h3>Weight Training Programs</h3>
+                    <div id="weightPrograms">
+                    </div>
+                </div>
+            </div>
+
+            <div id="programEnrollPaymentForm" class="form-group">
+                <p><span id="totalPayment"></span></p>
+                <label>Select payment method:</label>
+                <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
+                <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
+            </div>
+
+            <button id="addProgramsBtn">Add Programs</button>
+
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const lastIdUrl = "http://localhost:7000/LastId";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const paymentsUrl = "http://localhost:7000/Payments";
+
+        let members = [];
+        let trainingProgramActivities = [];
+        let enrolledPrograms = [];
+        let payments = [];
+        let lastIds = [];
+        let selectedActivities = [];
+        let newlySelectedActivities = [];
+        let enrollMonths = [{ period: 1, discount: 0 }, { period: 3, discount: 10 }, { period: 6, discount: 15 }, { period: 12, discount: 25 },];
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+
+        //const selectedMemberId = document.getElementById('memberSelect').value;
+        const enrolledMonths = document.getElementById('monthsSelect').value;
+
+
+
+        populateDropdowns();
+        populateTrainingPrograms();
+
+        function populateDropdowns() {
+            const memberSelect = document.getElementById('memberSelect');
+            memberSelect.innerHTML = '';
+            let defaultMemberOption = document.createElement('option');
+            defaultMemberOption.text = `Select Member`;
+            memberSelect.appendChild(defaultMemberOption);
+
+            members.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.text = `${member.id} - ${member.UserName}`;
+                memberSelect.appendChild(option);
+            });
+
+            const monthSelect = document.getElementById('monthsSelect');
+            monthSelect.innerHTML = '';
+            let defaultMonthOption = document.createElement('option');
+            defaultMonthOption.text = "Select Month";
+            defaultMonthOption.value = 1;
+            monthSelect.appendChild(defaultMonthOption);
+
+            enrollMonths.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month.period;
+                option.text = `${month.period} - Discount ${month.discount} %`;
+                monthSelect.appendChild(option);
+            });
+
+            memberSelect.addEventListener('change', handleMemberSelection);
+            monthSelect.addEventListener('change', handleMemberSelection);
+        };
+
+        function handleMemberSelection() {
+            const selectedMemberId = document.getElementById('memberSelect').value;
+            const selectedMonths = Number(document.getElementById('monthsSelect').value);
+            console.log(selectedMemberId)
+            console.log(selectedMonths)
+            if (!selectedMemberId) return;
+
+            originalEnrolledPrograms = enrolledPrograms.filter(enroll => enroll.MemberID === selectedMemberId);
+
+            selectedActivities = []; //reset
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            originalEnrolledPrograms.forEach(enrolled => {
+                const checkbox = document.querySelector(`input[value="${enrolled.ActivittID}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                    selectedActivities.push(parseInt(checkbox.dataset.cost, 10));
+                }
+            });
+
+            const addProgramsBtn = document.getElementById('addProgramsBtn');
+            if (originalEnrolledPrograms.length > 0) {
+                addProgramsBtn.textContent = 'Update Program';
+            } else {
+                addProgramsBtn.textContent = 'Add Program';
+            }
+
+            calculateTotalCost(selectedMonths);
+        };
+
+        function populateTrainingPrograms() {
+            const cardioSection = document.getElementById('cardioPrograms');
+            const weightSection = document.getElementById('weightPrograms');
+
+            cardioSection.innerHTML = '';
+            weightSection.innerHTML = '';
+
+            trainingProgramActivities.forEach(activity => {
+                const label = document.createElement('label');
+                label.innerHTML = `${activity.ActivityName} - Rs ${activity.Cost}`;
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = activity.ActivittID;
+                checkbox.dataset.cost = activity.Cost;
+                label.classList.add('program-checkbox-label');
+                checkbox.classList.add('program-checkbox');
+
+                checkbox.addEventListener('change', handleCheckboxChange);
+
+                label.prepend(checkbox);
+
+                if (activity.TypeID === 'P001') {
+                    cardioSection.appendChild(label);
+                } else if (activity.TypeID === 'P002') {
+                    weightSection.appendChild(label);
+                }
+            });
+        };
+
+        function handleCheckboxChange(event) {
+            const activityCost = parseInt(event.target.dataset.cost, 10);
+            const activityId = event.target.value;
+
+            const additionalPaymentElement = document.createElement('p');
+            additionalPaymentElement.id = "additionalPayment";
+
+            if (event.target.checked) {
+                if (!originalEnrolledPrograms.some(enrolled => enrolled.ActivittID == activityId)) {
+                    newlySelectedActivities.push(activityCost);
+                    additionalPaymentElement.textContent = `Additional Payment: Rs ${activityCost}`;
+                }
+                selectedActivities.push(activityCost);
+            } else {
+                selectedActivities = selectedActivities.filter(cost => cost !== activityCost);
+                newlySelectedActivities = newlySelectedActivities.filter(cost => cost !== activityCost);
+
+                if (newlySelectedActivities.length === 0) {
+                    additionalPaymentElement.textContent = '';
+                }
+            }
+
+            calculateTotalCost();
+        };
+
+        // function calculateTotalCost(months = 1) {
+        //     let totalCost = 0;
+        //     let totalFinalCost = "";
+        //     let newlySelectedCost = "";
+        //     totalCost = selectedActivities.reduce((total, cost) => total + cost, 0);
+        //     newlySelectedCost = newlySelectedActivities.reduce((total, cost) => total + cost, 0);
+        //     console.log(totalCost)
+        //     console.log(months)
+        //     totalFinalCost = calculateDiscountedAmount(totalCost, months);
+
+        //     document.getElementById('totalPayment').textContent = totalCost !== 0 ? `Total Payment: Rs ${totalFinalCost}` : "Total Payment: Rs 0";
+        //     const additionalPaymentElement = document.createElement('p');
+        //     additionalPaymentElement.id = "additionalPayment";
+
+        //     additionalPaymentElement.textContent = newlySelectedActivities.length > 0 ?
+        //         `Additional Payment: Rs ${newlySelectedCost}` : '';
+        //     totalCost = "";
+        //     totalFinalCost = "";
+        //     newlySelectedCost = "";
+
+        // };
+
+        function calculateProratedCost(newlySelectedActivities, selectedMemberId) {
+            const memberPayments = payments.filter(payment => payment.MemberID === selectedMemberId && payment.PaymentType !== 'ProgramAddon');
+
+            if (memberPayments.length === 0) {
+                return 0;
+            }
+
+            const sortedPayments = memberPayments.sort((a, b) => new Date(b.PaidDate) - new Date(a.PaidDate));
+            const lastPayment = sortedPayments[0];
+            const dueDate = lastPayment.DueDate;
+            const today = new Date();
+
+            const remainingDays = Math.ceil((new Date(dueDate) - today) / (1000 * 60 * 60 * 24));
+
+            if (remainingDays < 0) {
+                return -1;
+            }
+
+            const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
+            const newlySelectedCost = newlySelectedActivities.reduce((total, cost) => {
+                const proratedCost = (cost / daysInCurrentMonth) * remainingDays;
+                return total + proratedCost;
+            }, 0);
+
+            return Math.ceil(newlySelectedCost);
+        }
+
+
+
+        function calculateTotalCost(months = 1) {
+            const selectedMemberId = document.getElementById('memberSelect').value;
+            if (!selectedMemberId) return;
+
+            let totalCost = 0;
+            let newlySelectedCost = 0;
+            let totalFinalCost = 0;
+
+            totalCost = selectedActivities.reduce((total, cost) => total + cost, 0);
+
+            newlySelectedCost = calculateProratedCost(newlySelectedActivities, selectedMemberId);
+
+            if (newlySelectedCost === -1) {
+                alert("Please settle your previous payment.");
+                return;
+            }
+
+            totalFinalCost = calculateDiscountedAmount(totalCost, months);
+
+            document.getElementById('totalPayment').textContent = totalCost !== 0 ? `Total Payment: Rs ${totalFinalCost}` : "Total Payment: Rs 0";
+
+            const additionalPaymentElement = document.createElement('p');
+            additionalPaymentElement.id = "additionalPayment";
+            additionalPaymentElement.textContent = newlySelectedActivities.length > 0 ?
+                `Additional Payment: Rs ${newlySelectedCost}` : '';
+
+            if (!document.getElementById('additionalPayment')) {
+                document.getElementById('totalPayment').after(additionalPaymentElement);
+            }
+
+            totalCost = "";
+            totalFinalCost = "";
+            newlySelectedCost = "";
+        }
+
+
+
+        /*  document.getElementById('addProgramsBtn').addEventListener('click', async (event) => {
+              event.preventDefault();
+              const selectedMemberId = document.getElementById('memberSelect').value;
+              const selectedMonths = Number(document.getElementById('monthsSelect').value);
+  
+              const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+              const totalCost = selectedActivities.reduce((total, cost) => total + cost, 0);
+              //const newlySelectedCost = newlySelectedActivities.reduce((total, cost) => total + cost, 0);
+              const newlySelectedCost = calculateProratedCost(newlySelectedActivities,selectedMemberId);
+  
+              // Ensure `enrolledMonths` is fetched correctly
+              const totalFinalCost = calculateDiscountedAmount(totalCost, selectedMonths);
+  
+              if (!selectedMemberId || totalCost === 0) {
+                  alert("Please select a member and at least one training program.");
+                  return;
+              }
+  
+              const checkedPrograms = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => parseInt(input.value, 10));
+  
+              // Delete removed programs (if any)
+              const removedPrograms = originalEnrolledPrograms.filter(enrolled => !checkedPrograms.includes(enrolled.ActivittID));
+              if (removedPrograms.length > 0) {
+                  for (const removedProgram of removedPrograms) {
+                      await deleteApi(enrolledTrainingProgramsUrl, removedProgram.id);
+                  }
+                  alert("Programs updated successfully! Removed unselected programs.");
+              }
+  
+              // Add new programs
+              for (const activityId of checkedPrograms) {
+                  const alreadyEnrolled = originalEnrolledPrograms.find(enrolled => enrolled.ActivittID === activityId);
+                  if (!alreadyEnrolled) {
+                      const newEnrollProgramId = generateID("E", lastIds.EnrollProgramID);
+                      const activity = trainingProgramActivities.find(act => act.ActivittID === activityId);
+  
+                      if (activity) {
+                          const newEnrolledProgram = {
+                              id: newEnrollProgramId,
+                              MemberID: selectedMemberId,
+                              ActivittID: activity.ActivittID
+                          };
+  
+                          const enroladdRes = await postApi(enrolledTrainingProgramsUrl, newEnrolledProgram);
+                          if (enroladdRes.ok) {
+                              lastIds.EnrollProgramID++;
+                          }
+                      }
+                  }
+              }
+  
+              // Handle payment
+              const newPaymentId = generateID("P", lastIds.PaymentID);
+              const paidDate = new Date();
+              const dueDate = new Date();
+              dueDate.setDate(paidDate.getDate() + 30);
+  
+              const newPayment = {
+                  id: newPaymentId,
+                  MemberID: selectedMemberId,
+                  PaymentType: newlySelectedCost === 0 ? "ProgramAddon" : "Monthly",
+                  Amount: totalFinalCost,
+                  PaidDate: paidDate.toISOString().split('T')[0],
+                  DueDate: newlySelectedCost === 0 ? null : dueDate.toISOString().split('T')[0],
+                  PaymentMethod: paymentMethod
+              };
+  
+              await postApi(paymentsUrl, newPayment);
+              alert(newlySelectedCost === 0 ? "Programs updated successfully!" : "Programs and payment enrolled successfully!");
+              lastIds.PaymentID++;
+              await updateLastId(lastIds);
+  
+              selectedActivities = [];
+              newlySelectedActivities = [];
+              document.getElementById('totalPayment').textContent = '0';
+              document.getElementById('additionalPayment').textContent = '';
+          });*/
+
+        document.getElementById('addProgramsBtn').addEventListener('click', async (event) => {
+            event.preventDefault();
+            const selectedMemberId = document.getElementById('memberSelect').value;
+            const selectedMonths = Number(document.getElementById('monthsSelect').value);
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const totalCost = selectedActivities.reduce((total, cost) => total + cost, 0);
+            const newlySelectedCost = calculateProratedCost(newlySelectedActivities, selectedMemberId);
+
+            const totalFinalCost = calculateDiscountedAmount(totalCost, selectedMonths);
+
+            if (!selectedMemberId || totalCost === 0) {
+                alert("Please select a member and at least one training program.");
+                return;
+            }
+
+            const checkedPrograms = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => parseInt(input.value, 10));
+
+            // Delete removed programs (if any)
+            const removedPrograms = originalEnrolledPrograms.filter(enrolled => !checkedPrograms.includes(enrolled.ActivittID));
+            if (removedPrograms.length > 0) {
+                for (const removedProgram of removedPrograms) {
+                    await deleteApi(enrolledTrainingProgramsUrl, removedProgram.id);
+                }
+                alert("Programs updated successfully! Removed unselected programs.");
+            }
+
+            for (const activityId of checkedPrograms) {
+                const alreadyEnrolled = originalEnrolledPrograms.find(enrolled => enrolled.ActivittID === activityId);
+                if (!alreadyEnrolled) {
+                    const newEnrollProgramId = generateID("E", lastIds.EnrollProgramID);
+                    const activity = trainingProgramActivities.find(act => act.ActivittID === activityId);
+
+                    if (activity) {
+                        const newEnrolledProgram = {
+                            id: newEnrollProgramId,
+                            MemberID: selectedMemberId,
+                            ActivittID: activity.ActivittID
+                        };
+
+                        const enroladdRes = await postApi(enrolledTrainingProgramsUrl, newEnrolledProgram);
+                        if (enroladdRes.ok) {
+                            lastIds.EnrollProgramID++;
+                        }
+                    }
+                }
+            }
+
+            const newPaymentId = generateID("P", lastIds.PaymentID);
+            const paidDate = new Date();
+            const dueDate = new Date();
+
+            let paymentType = "Monthly"; 
+            if (selectedMonths === 1) {
+                dueDate.setDate(paidDate.getDate() + 30); // Set due date to 30 days from today
+            } else if (selectedMonths === 3) {
+                paymentType = "Quarterly";
+                dueDate.setDate(paidDate.getDate() + 90); // Set due date to 90 days (approx. 3 months)
+            } else if (selectedMonths === 6) {
+                paymentType = "Half-Yearly";
+                dueDate.setDate(paidDate.getDate() + 180); // Set due date to 180 days (approx. 6 months)
+            } else if (selectedMonths === 12) {
+                paymentType = "Annually";
+                dueDate.setDate(paidDate.getDate() + 365); // Set due date to 365 days (1 year)
+            }
+
+            const newPayment = {
+                id: newPaymentId,
+                MemberID: selectedMemberId,
+                PaymentType: newlySelectedCost === 0 ? "ProgramAddon" : paymentType,  // Use calculated payment type
+                Amount: totalFinalCost,
+                PaidDate: paidDate.toISOString().split('T')[0],
+                DueDate: newlySelectedCost === 0 ? null : dueDate.toISOString().split('T')[0],
+                PaymentMethod: paymentMethod
+            };
+
+            await postApi(paymentsUrl, newPayment);
+            alert(newlySelectedCost === 0 ? "Programs updated successfully!" : "Programs and payment enrolled successfully!");
+            lastIds.PaymentID++;
+            await updateLastId(lastIds);
+
+            selectedActivities = [];
+            newlySelectedActivities = [];
+            document.getElementById('totalPayment').textContent = '0';
+            document.getElementById('additionalPayment').textContent = '';
+        });
+
+        function calculateDiscountedAmount(amount, months) {
+            let finalAmount;
+
+            switch (months) {
+                case 1:
+                    finalAmount = amount;
+                    break;
+                case 3:
+                    finalAmount = amount - (amount * 0.10);
+                    break;
+                case 6:
+                    finalAmount = amount - (amount * 0.15);
+                    break;
+                case 12:
+                    finalAmount = amount - (amount * 0.25);
+                    break;
+            }
+
+            console.log(finalAmount)
+            if (months === 1) {
+                return finalAmount;
+            } else {
+                return Math.ceil(finalAmount / 100) * 100;
+            }
+        }
+    })
+</script>

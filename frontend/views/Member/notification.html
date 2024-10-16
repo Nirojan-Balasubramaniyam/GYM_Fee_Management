@@ -1,0 +1,99 @@
+<style>
+    #notificationCard {
+        margin-top: 10px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 500px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 20px;
+        border-radius: 10px;
+        /* width: 100%; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Table Header Styles */
+    .notification-table-header {
+        background-color: #1abc9c;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    /* Notification Table Header (override specific style) */
+    .notification-table-header {
+        background-color: #353f3d;
+    }
+
+    .notification-table-row td {
+        padding: 15px 0;
+        letter-spacing: 2px;
+        /* font-weight: bold; */
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Notifications</h2>
+    <div id="notificationCard">
+        <div class="row">
+            <div class="col-12">
+                <div class="notification-card">
+                    <table id="notificationTable">
+                        <!-- <thead>
+                            <tr>
+                                <th class="notification-table-header">Alert Type</th>
+                                <th class="notification-table-header">Amount (LKR)</th>
+                                <th class="notification-table-header">Due Date</th>
+                            </tr>
+                        </thead> -->
+                        <tbody id="notificationTableBody">
+                            <!-- Payment rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const alertsUrl = "http://localhost:7000/Alerts";
+        let alerts = [];
+        let members = [];
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const alertsResponse = await fetch(alertsUrl);
+        alerts = await alertsResponse.json();
+
+        function displayNotification() {
+            const notificationTableBody = document.getElementById('notificationTableBody');
+            notificationTableBody.innerHTML = '';
+
+            const memberAlerts = alerts.filter(alert => alert.MemberID === loggedInUser.id);
+            if (memberAlerts.length === 0) {
+                const noNotificationtRow = document.createElement('tr');
+                const noNotificationtCell = document.createElement('td');
+                noNotificationtCell.setAttribute('colspan', 4);
+                noNotificationtCell.textContent = "You don't have any notifications";
+                noNotificationtRow.appendChild(noNotificationtCell);
+                notificationTableBody.appendChild(noNotificationtRow);
+                return;
+            }
+            let order=1;
+            memberAlerts.forEach(alert => {                
+                if (alert.Status) {
+                    const row = document.createElement('tr');
+                    row.classList.add('notification-table-row');
+                    row.innerHTML = `<td>${order}. You have the ${alert.AlertType} alert of Rs ${alert.Amount}  :  Due Date is ${alert.DueDate} </td> `;
+                    notificationTableBody.appendChild(row);
+                    order++;
+                }
+            });
+        }
+        displayNotification();
+    })
+</script>

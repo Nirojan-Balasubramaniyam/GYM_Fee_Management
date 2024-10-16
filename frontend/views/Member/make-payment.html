@@ -1,0 +1,203 @@
+<style>
+    #paymentForm input {
+        background-color: white;
+    }
+
+    .paymentCard h2,
+    h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #paymentForm input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #paymentForm input:focus {
+        outline: none;
+        border-color: #1abc9c;
+    }
+
+    #paymentForm button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1abc9c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #paymentForm button:hover {
+        background-color: #16a085;
+    }
+
+    #paymentSection {
+        margin-top: 20px;
+    }
+
+    #paymentCard {
+        margin-top: 10px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 500px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 20px;
+        border-radius: 10px;
+        /* width: 100%; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Payment</h2>
+    <div id="paymentCard">
+        <div class="row">
+            <div class="col-12">
+                <div id="paymentSection">
+                    <form id="paymentForm">
+                        <label for="amount">Amount (LKR):</label>
+                        <input type="number" id="amount" placeholder="Enter amount" required>
+
+                        <label for="receiptNumber">Receipt Number:</label>
+                        <input type="text" id="receiptNumber" placeholder="Enter receipt number" required>
+
+                        <label for="receiptUpload">Upload Receipt:</label>
+                        <input type="file" id="receiptUpload" required>
+
+                        <button type="submit" class="btn">Pay</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const lastIdUrl = "http://localhost:7000/LastId";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const paymentsUrl = "http://localhost:7000/Payments";
+        const approvalRequestsUrl = "http://localhost:7000/ApprovalRequests";
+
+        let approvalRequests = [];
+        let lastIds = [];
+        let members = [];
+        let payments = [];
+        let trainingProgramActivities = [];
+        let enrolledPrograms = [];
+
+        const paymentResponse = await fetch(paymentsUrl);
+        payments = await paymentResponse.json();
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        const memberPrograms = enrolledPrograms.filter(program => program.MemberID === loggedInUser.id);
+        console.log(memberPrograms)
+        const totalPayment = memberPrograms.reduce((total, program) => {
+            const activity = trainingProgramActivities.find(activity => activity.ActivittID === program.ActivittID);
+            return total + (activity ? activity.Cost : 0);
+        }, 0);
+
+        console.log(totalPayment);
+
+        document.getElementById('amount').value = totalPayment;
+
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const memberId = Number(getQueryParam('memberId'));
+            console.log(memberId);
+
+            const fetchApprovals = async () => {
+                const response = await fetch(approvalRequestsUrl);
+                approvalRequests = await response.json();
+                console.log(approvalRequestsUrl);
+
+                const amount = totalPayment;
+                const receiptNumber = document.getElementById('receiptNumber').value.trim();
+                const receiptFile = document.getElementById('receiptUpload').files[0];
+                const fetchlastId = async () => {
+                    const response = await fetch(lastIdUrl);
+                    lastIds = await response.json();
+                    console.log(lastIds);
+
+                    let lastAprovalId = lastIds.ApprovalRequestID;
+                    console.log(lastAprovalId);
+
+                    function generateID() {
+                        const prefix = "AR";
+                        const number = lastAprovalId.toString().padStart(3, '0');
+                        lastAprovalId++;
+                        lastIds.ApprovalRequestID = lastAprovalId;
+                        updateLastId(lastIds);
+                        return prefix + number;
+                    }
+
+                    const updateLastId = async (updatedLastIds) => {
+                        try {
+                            const response = await fetch(`${lastIdUrl}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(updatedLastIds)
+                            });
+                        } catch (error) {
+                            console.error("Error updating LastId:", error);
+                        }
+                    };
+
+                    if (amount && receiptNumber && receiptFile) {
+                        const newApprovalRequest = {
+                            id: generateID(),
+                            RequestType: "payment",
+                            MemberID: memberId,
+                            PaymentDetails: {
+                                PaymentType: "monthly",
+                                Amount: parseFloat(amount),
+                                ReceiptNumber: receiptNumber,
+                                PaidDate: new Date().toISOString().split('T')[0]
+                            },
+                            Status: "pending"
+                        };
+
+                        const postResponse = await fetch(approvalRequestsUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(newApprovalRequest)
+                        });
+                        alert('Payment request sent to admin for approval!');
+                    } else {
+                        alert('Please complete all fields.');
+                    }
+                };
+
+                fetchlastId();
+            };
+            fetchApprovals();
+        });
+
+    })
+</script>

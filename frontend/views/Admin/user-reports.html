@@ -1,0 +1,162 @@
+<style>
+    #memberReportCard {
+        max-height: 100vh;
+        height: 600px;
+        margin-top: 50px;
+        background-color: #ecf0f1;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #membersReportSection {
+        margin: 20px auto;
+        max-width: 1200px;
+    }
+    #membersReportContainer {
+        max-height: 550px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+    }
+    #membersReportTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #membersReportTable th,
+    #membersReportTable td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    #membersReportTable th {
+        background-color: #1abc9c;
+        color: white;
+        text-align: center;
+        position: sticky;
+        top: 0;
+    }
+
+    #membersReportTable td {
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .member-row:hover {
+        background-color: #f1f1f1;
+    }
+
+    .training-program-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .training-program-header {
+        margin: 5px 0;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .training-program-item {
+        margin-left: 20px;
+        font-size: 13px;
+        color: #34495e;
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Member Report</h2>
+    <div id="dynamicContent">
+        <div id="memberReportCard">
+            <div id="membersReportSection">
+                <div id="membersReportContainer">
+                    <table id="membersReportTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Member ID</th>
+                                <th>Full Name</th>
+                                <th>Phone</th>
+                                <th>NIC</th>
+                                <th>Programs</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="membersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const membersUrl = "http://localhost:7000/Members";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        let members = [];
+        let enrolledPrograms = [];
+        let trainingProgramActivities = [];
+
+        const memberResponse = await fetch(membersUrl);
+        members = await memberResponse.json();
+
+        const enrolledResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
+
+     
+
+        function displayMembersReport() {
+            const membersReportBody = document.getElementById('membersTableBody');
+            membersReportBody.innerHTML = '';
+
+            members.forEach((member, index) => {
+                const memberPrograms = enrolledPrograms.filter(program => program.MemberID === member.id);
+                const cardioPrograms = generateListItems(memberPrograms, trainingProgramActivities, "P001");
+                const weightTrainingPrograms = generateListItems(memberPrograms, trainingProgramActivities, "P002");
+                const trainingProgramsList = `
+                                        <div class="training-program-list">
+                                        <div class="training-program-header">Cardio</div>
+                                        <div class="training-program-list-items">${cardioPrograms}</div>
+                                        <div class="training-program-header">Weight Training</div>
+                                        <div class="training-program-list-items">${weightTrainingPrograms}</div>
+                                    </div> `;
+
+                const row = document.createElement('tr');
+                row.classList.add('member-row');
+                row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${member.id}</td>
+                <td>${member.LastName} ${member.FirstName}</td>
+                <td>${member.Phone}</td>
+                <td>${member.NIC}</td>
+                <td>${trainingProgramsList}</td>
+            `;
+
+                membersReportBody.appendChild(row);
+            });
+        };
+
+        const generateListItems = (programs, activities, typeId) => {
+            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+
+            if (filteredPrograms.length === 0) {
+                return typeId === "P001" ? '<div class="training-program-item">No cardio programs enrolled</div>' : '<div class="training-program-item">No weight training programs enrolled</div>';
+            }
+
+            return filteredPrograms.map(program => {
+                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                return activity ? `<div class="training-program-item">${activity.ActivityName}</div>` : '<div class="training-program-item">No matching activity</div>';
+            }).join('');
+        };
+
+        displayMembersReport();
+    })
+</script>
