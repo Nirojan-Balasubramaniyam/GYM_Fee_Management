@@ -428,19 +428,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rojan\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rojan\\Desktop\\GYM\\gym m2 v4\\backend_api\\Gym_Fee_Management\\Gym_Fee_Management.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\GYM_Fee_Management\\backend_api\\Gym_Fee_Management\\Gym_Fee_Management.csproj",
       "projectName": "Gym_Fee_Management",
-      "projectPath": "C:\\Users\\rojan\\Desktop\\GYM\\gym m2 v4\\backend_api\\Gym_Fee_Management\\Gym_Fee_Management.csproj",
-      "packagesPath": "C:\\Users\\rojan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rojan\\Desktop\\GYM\\gym m2 v4\\backend_api\\Gym_Fee_Management\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\GYM_Fee_Management\\backend_api\\Gym_Fee_Management\\Gym_Fee_Management.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\GYM_Fee_Management\\backend_api\\Gym_Fee_Management\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\rojan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -448,6 +448,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -495,7 +496,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
