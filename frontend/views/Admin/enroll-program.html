@@ -311,30 +311,8 @@
             calculateTotalCost();
         };
 
-        // function calculateTotalCost(months = 1) {
-        //     let totalCost = 0;
-        //     let totalFinalCost = "";
-        //     let newlySelectedCost = "";
-        //     totalCost = selectedActivities.reduce((total, cost) => total + cost, 0);
-        //     newlySelectedCost = newlySelectedActivities.reduce((total, cost) => total + cost, 0);
-        //     console.log(totalCost)
-        //     console.log(months)
-        //     totalFinalCost = calculateDiscountedAmount(totalCost, months);
-
-        //     document.getElementById('totalPayment').textContent = totalCost !== 0 ? `Total Payment: Rs ${totalFinalCost}` : "Total Payment: Rs 0";
-        //     const additionalPaymentElement = document.createElement('p');
-        //     additionalPaymentElement.id = "additionalPayment";
-
-        //     additionalPaymentElement.textContent = newlySelectedActivities.length > 0 ?
-        //         `Additional Payment: Rs ${newlySelectedCost}` : '';
-        //     totalCost = "";
-        //     totalFinalCost = "";
-        //     newlySelectedCost = "";
-
-        // };
-
         function calculateProratedCost(newlySelectedActivities, selectedMemberId) {
-            const memberPayments = payments.filter(payment => payment.MemberID === selectedMemberId && payment.PaymentType !== 'ProgramAddon');
+            const memberPayments = payments.filter(payment => payment.MemberID === selectedMemberId && payment.PaymentType !== 'ProgramAddon'&& payment.PaymentType !== 'Initial');
 
             if (memberPayments.length === 0) {
                 return 0;
