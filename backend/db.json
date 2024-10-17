@@ -3,7 +3,7 @@
     {
       "id": "M001",
       "FirstName": "Rojann",
-      "LastName": "Baala",
+      "LastName": "Bala",
       "UserName": "rojan",
       "NIC": "970783288v",
       "Phone": "12344569",
@@ -38,6 +38,58 @@
       "Adress": "862 Murphy Hill",
       "EmergencyContact": "357",
       "EmergencyContactPrsn": "Kuhn"
+    },
+    {
+      "id": "M016",
+      "FirstName": "kannan",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789456",
+      "Phone": "1234567895",
+      "DoB": "male",
+      "Gender": "2024-10-02",
+      "Adress": "No.05, kks road, Jaffna",
+      "EmergencyContact": "rajinikanth",
+      "EmergencyContactPrsn": "7896541235"
+    },
+    {
+      "id": "M017",
+      "FirstName": "kannand",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789123",
+      "Phone": "1234567896",
+      "DoB": "male",
+      "Gender": "2024-10-03",
+      "Adress": "kkas road, Chunnakam",
+      "EmergencyContact": "rajinikanth",
+      "EmergencyContactPrsn": "7894561235"
+    },
+    {
+      "id": "M018",
+      "FirstName": "kannan",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789456",
+      "Phone": "1234567895",
+      "DoB": "male",
+      "Gender": "2024-10-02",
+      "Adress": "No.05, kks road, Jaffna",
+      "EmergencyContact": "rajinikanth",
+      "EmergencyContactPrsn": "7896541235"
+    },
+    {
+      "id": "M019",
+      "FirstName": "bt",
+      "LastName": "tyh",
+      "UserName": "tyb",
+      "NIC": "123456789v",
+      "Phone": "1234567891",
+      "DoB": "2024-10-09",
+      "Gender": "male",
+      "Adress": "ert",
+      "EmergencyContactPrsn": "ertg",
+      "EmergencyContact": "1234567894"
     }
   ],
   "Users": [
@@ -68,6 +120,13 @@
       "UserName": "Elmer.Buckridge38",
       "Password": "408",
       "UserRoll": "member"
+    },
+    {
+      "id": "M019",
+      "MemberID": "M019",
+      "UserName": "tyb",
+      "Password": "1234567891",
+      "UserRoll": "member"
     }
   ],
   "TrainingProgramTypes": [
@@ -76,7 +135,7 @@
       "id": "P001"
     },
     {
-      "ProgramTypeName": "weighttraining",
+      "ProgramTypeName": "weight Training",
       "id": "P002"
     }
   ],
@@ -122,83 +181,49 @@
       "ActivityName": "Body Shaping",
       "Cost": 1600,
       "id": "A006"
+    },
+    {
+      "id": "A007",
+      "TypeID": "P001",
+      "ActivityName": "Weight Lift",
+      "Cost": "500"
     }
   ],
   "EnrolledTrainingPrograms": [
     {
-      "id": "E001",
-      "ActivittID": 2,
-      "MemberID": "M001"
-    },
-    {
-      "id": "E002",
-      "ActivittID": 4,
-      "MemberID": "M002"
-    },
-    {
-      "id": "E003",
-      "ActivittID": 3,
-      "MemberID": "M003"
-    },
-    {
-      "id": "E008",
-      "MemberID": "M011",
-      "ActivittID": 1
-    },
-    {
-      "id": "E009",
-      "MemberID": "M011",
-      "ActivittID": 2
-    },
-    {
-      "id": "E010",
-      "MemberID": "M011",
-      "ActivittID": 3
-    },
-    {
-      "id": "E011",
-      "MemberID": "M002",
-      "ActivittID": 5
-    },
-    {
-      "id": "E013",
-      "MemberID": "M001",
-      "ActivittID": 1
-    },
-    {
-      "id": "E015",
-      "MemberID": "M010",
-      "ActivittID": 1
-    },
-    {
       "id": "E016",
       "MemberID": "M001",
-      "ActivittID": 3
+      "ActivittID": "A003"
     },
     {
       "id": "E017",
       "MemberID": "M011",
-      "ActivittID": 4
+      "ActivittID": "A004"
     },
     {
       "id": "E018",
       "MemberID": "M001",
-      "ActivittID": 4
+      "ActivittID": "A004"
     },
     {
       "id": "E019",
       "MemberID": "M012",
-      "ActivittID": 1
+      "ActivittID": "A001"
     },
     {
       "id": "E020",
       "MemberID": "M012",
-      "ActivittID": 4
+      "ActivittID": "A004"
     },
     {
       "id": "E021",
       "MemberID": "M012",
-      "ActivittID": 2
+      "ActivittID": "A002"
+    },
+    {
+      "id": "E027",
+      "ActivittID": "A006",
+      "MemberID": "M001"
     }
   ],
   "Payments": [
@@ -856,6 +881,201 @@
       "PaidDate": "2024-10-16",
       "DueDate": "2024-11-15",
       "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P093",
+      "MemberID": "M014",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Cash",
+      "PaidDate": "2024-10-16",
+      "DueDate": null
+    },
+    {
+      "id": "P094",
+      "MemberID": "M015",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Bank",
+      "PaidDate": "2024-10-16",
+      "DueDate": null
+    },
+    {
+      "id": "P095",
+      "MemberID": "M014",
+      "PaymentType": "Monthly",
+      "Amount": 2500,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2024-11-15",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P096",
+      "MemberID": "M015",
+      "PaymentType": "Half-Yearly",
+      "Amount": 500,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-04-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P097",
+      "MemberID": "M001",
+      "PaymentType": "Monthly",
+      "Amount": 4350,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2024-11-15",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P098",
+      "MemberID": "M014",
+      "PaymentType": "Annually",
+      "Amount": 1900,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-10-16",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P099",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P100",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P099",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P099",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P100",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P101",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P102",
+      "MemberID": "M001",
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-04-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P103",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P104",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P105",
+      "MemberID": "M001",
+      "PaymentType": "Quarterly",
+      "Amount": 4000,
+      "PaidDate": "2024-10-16",
+      "DueDate": "2025-01-14",
+      "PaymentMethod": "Cash"
+    },
+    {
+      "id": "P106",
+      "MemberID": "M001",
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "PaymentMethod": "Bank"
+    },
+    {
+      "id": "P107",
+      "MemberID": "M001",
+      "PaymentType": "ProgramAddon",
+      "Amount": 4593.548387096774,
+      "PaidDate": "2024-10-17",
+      "DueDate": null,
+      "PaymentMethod": "Bank"
+    },
+    {
+      "id": "P107",
+      "MemberID": "M016",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Bank",
+      "DueDate": null
+    },
+    {
+      "id": "P108",
+      "MemberID": "M017",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Bank",
+      "DueDate": null
+    },
+    {
+      "id": "P109",
+      "MemberID": "M018",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Bank",
+      "DueDate": null
+    },
+    {
+      "id": "P110",
+      "MemberID": "M019",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Cash",
+      "PaidDate": "2024-10-17",
+      "DueDate": null
     }
   ],
   "Alerts": [
@@ -865,7 +1085,7 @@
       "Amount": 2500,
       "DueDate": "2024-06-01",
       "MemberID": "M001",
-      "Status": true
+      "Status": false
     },
     {
       "id": "AT002",
@@ -881,23 +1101,15 @@
       "Amount": 2500,
       "DueDate": "2024-10-05",
       "MemberID": "M003",
-      "Status": true
-    },
-    {
-      "id": "AT004",
-      "AlertType": "renewal",
-      "Amount": 2900,
-      "DueDate": "2024-11-02",
-      "MemberID": "M002",
       "Status": false
     },
     {
       "id": "AT004",
       "AlertType": "renewal",
-      "Amount": 54,
-      "DueDate": "2024-11-02",
-      "MemberID": "M001",
-      "Status": true
+      "Amount": 500,
+      "DueDate": "2024-10-06",
+      "MemberID": "M010",
+      "Status": false
     },
     {
       "id": "AT004",
@@ -922,262 +1134,205 @@
       "DueDate": "2024-10-02",
       "MemberID": "M011",
       "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "overdue",
+      "Amount": 550,
+      "DueDate": "2024-10-06",
+      "MemberID": "M003",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "overdue",
+      "Amount": 500,
+      "DueDate": "2024-10-06",
+      "MemberID": "M010",
+      "Status": true
+    },
+    {
+      "id": "AT004",
+      "AlertType": "paymentrequestMessage",
+      "Amount": 3700,
+      "programOrEnrollid": null,
+      "DueDate": "2025-04-15",
+      "MemberID": "M001",
+      "Status": true
+    },
+    {
+      "id": "AT008",
+      "AlertType": "leaveProgramRequestMessage",
+      "Amount": 4593.548387096774,
+      "programOrEnrollid": 6,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": false
+    },
+    {
+      "id": "AT009",
+      "AlertType": "programAddonRequestMessage",
+      "Amount": null,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": true
+    },
+    {
+      "id": "AT010",
+      "AlertType": "leaveProgramRequestMessage",
+      "Amount": 4593.548387096774,
+      "programOrEnrollid": 6,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": false
+    },
+    {
+      "id": "AT011",
+      "AlertType": "memberInfoRequestMessage",
+      "Amount": null,
+      "programOrEnrollid": null,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": true
+    },
+    {
+      "id": "AT012",
+      "AlertType": "memberInfoRequestMessage",
+      "Amount": null,
+      "programOrEnrollid": null,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": false
+    },
+    {
+      "id": "AT013",
+      "AlertType": "memberInfoRequestMessage",
+      "Amount": null,
+      "programOrEnrollid": null,
+      "DueDate": null,
+      "MemberID": "M001",
+      "Status": true
     }
   ],
   "ApprovalRequests": [
     {
-      "id": "AR001",
-      "RequestType": "newMember",
-      "MemberID": "N/A",
-      "MemberDetails": {
-        "UserName": "John",
-        "Password": "0712345678",
-        "FirstName": "John",
-        "LastName": "Doe",
-        "Nic": "123456789V",
-        "Dob": "1995-06-15",
-        "Phone": "0712345678",
-        "RegistrationDate": "2024-10-01",
-        "ReceiptNumber": "REC123456"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR002",
+      "id": "AR036",
       "RequestType": "payment",
       "MemberID": "M001",
-      "PaymentDetails": {
-        "PaymentType": "monthly",
-        "Amount": 2500,
-        "PaidDate": "2024-10-01",
-        "ReceiptNumber": "PAY987654"
-      },
-      "Status": "Accepted"
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "ReceiptNumber": "dhj",
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "Status": "accepted"
     },
     {
-      "id": "AR004",
+      "id": "AR037",
       "RequestType": "payment",
       "MemberID": "M001",
-      "PaymentDetails": {
-        "PaymentType": "monthly",
-        "Amount": 522,
-        "ReceiptNumber": "hytyh45",
-        "PaidDate": "2024-10-01"
-      },
-      "Status": "Rejected"
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "ReceiptNumber": "fgh",
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "Status": "pending"
     },
     {
-      "id": "AR011",
-      "RequestType": "memberInfoChange",
+      "id": "AR038",
+      "RequestType": "leaveProgram",
       "MemberID": "M001",
-      "MemberInfoChangeDetails": {
-        "FirstName": "Rojan",
-        "LastName": "Bala",
-        "Phone": "12344567",
-        "NIC": "970783288v"
-      },
-      "Status": "Pending"
+      "leavedEmrollId": "E026",
+      "Status": "accepted"
     },
     {
-      "id": "AR013",
-      "RequestType": "memberInfoChange",
+      "id": "AR039",
+      "RequestType": "programAddon",
       "MemberID": "M001",
-      "NewEnrollProgramIDDetails": {
-        "FirstName": "Rojan",
-        "LastName": "Bala",
-        "Phone": "12344567",
-        "NIC": "970783288v"
-      },
-      "Status": "Pending"
+      "PaymentType": "ProgramAddon",
+      "Amount": 4593.548387096774,
+      "PaidDate": "2024-10-17",
+      "DueDate": null,
+      "ReceiptNumber": "dfv",
+      "ActivittID": 6,
+      "ProgramTypeID": "P002",
+      "Status": "rejected"
     },
     {
-      "id": "AR014",
-      "RequestType": "removeTrainingProgram",
-      "MemberID": "M012",
-      "EnrollProgramIDDetails": {
-        "ActivittID": 3,
-        "ProgramTypeID": "P001"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR015",
-      "RequestType": "removeTrainingProgram",
-      "MemberID": "M013",
-      "EnrollProgramIDDetails": {
-        "ActivittID": 3,
-        "ProgramTypeID": "P001"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR016",
-      "RequestType": "addTrainingProgram",
-      "MemberID": "M012",
-      "PaymentDetail": {
-        "id": "P070",
-        "MemberID": "M012",
-        "PaymentType": "Enrollprogram",
-        "Amount": 1300,
-        "PaidDate": "2024-10-04",
-        "DueDate": "2024-11-03",
-        "PaymentMethod": "Bank"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 4,
-        "ProgramTypeID": "P002"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR017",
-      "RequestType": "addTrainingProgram",
-      "MemberID": "M012",
-      "PaymentDetail": {
-        "id": "P071",
-        "MemberID": "M012",
-        "PaymentType": "Enrollprogram",
-        "Amount": 1300,
-        "PaidDate": "2024-10-04",
-        "DueDate": "2024-11-03",
-        "PaymentMethod": "Bank"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 4,
-        "ProgramTypeID": "P002"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR018",
-      "RequestType": "payment",
-      "MemberID": "M012",
-      "PaymentDetails": {
-        "PaymentType": "monthly",
-        "Amount": 900,
-        "ReceiptNumber": "asd",
-        "PaidDate": "2024-10-04"
-      },
-      "Status": "Rejected"
-    },
-    {
-      "id": "AR019",
-      "RequestType": "addTrainingProgram",
+      "id": "AR040",
+      "RequestType": "changeMemberInfo",
       "MemberID": "M001",
-      "PaymentDetail": {
-        "id": "P073",
-        "MemberID": "M001",
-        "PaymentType": "Enrollprogram",
-        "Amount": 550,
-        "PaidDate": "2024-10-04",
-        "DueDate": "2024-11-03",
-        "PaymentMethod": "Bank"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 3,
-        "ProgramTypeID": "P001"
-      },
-      "Status": "Pending"
+      "FirstName": "Rojann",
+      "LastName": "Bala",
+      "Phone": "12344569",
+      "NIC": "970783288v",
+      "Status": "accepted"
     },
     {
-      "id": "AR020",
-      "RequestType": "removeTrainingProgram",
-      "MemberID": "M001",
-      "ProgramIDDetails": {
-        "ActivittID": 2,
-        "ProgramTypeID": "P001"
-      },
-      "Status": "Pending"
+      "id": "AR041",
+      "RequestType": "newMemberRequest",
+      "FirstName": "kannan",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789456",
+      "Phone": "1234567895",
+      "DOB": "2024-10-02",
+      "Gender": "male",
+      "Address": "No.05, kks road, Jaffna",
+      "EmergencyContactName": "rajinikanth",
+      "EmergencyContactNumber": "7896541235",
+      "PaymentReceiptNumber": "vbn",
+      "Status": "accepted"
     },
     {
-      "id": "AR021",
-      "RequestType": "memberInfoChange",
-      "MemberID": "M001",
-      "NewEnrollProgramIDDetails": {
-        "FirstName": "Rojan",
-        "LastName": "Bala",
-        "Phone": "12344567",
-        "NIC": "970783288v"
-      },
-      "Status": "Pending"
+      "id": "AR042",
+      "RequestType": "newMemberRequest",
+      "FirstName": "kannand",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789123",
+      "Phone": "1234567896",
+      "DOB": "2024-10-03",
+      "Gender": "male",
+      "Address": "kkas road, Chunnakam",
+      "EmergencyContactName": "rajinikanth",
+      "EmergencyContactNumber": "7894561235",
+      "PaymentReceiptNumber": "ertg",
+      "Status": "pending"
     },
     {
-      "id": "AR023",
-      "RequestType": "memberInfoChange",
-      "MemberID": "M001",
-      "NewEnrollProgramIDDetails": {
-        "FirstName": "Rojann",
-        "LastName": "Baala",
-        "Phone": "12344569",
-        "NIC": "970783288v"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR024",
-      "RequestType": "addTrainingProgram",
+      "id": "AR043",
+      "RequestType": "programAddon",
       "MemberID": "M012",
-      "PaymentDetail": {
-        "id": "P087",
-        "MemberID": "M012",
-        "PaymentType": "ProgramAddon",
-        "Amount": 1548.3870967741934,
-        "PaidDate": "2024-10-16",
-        "DueDate": null,
-        "ReceiptNumber": "afsgrhdtmh"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 5,
-        "ProgramTypeID": "P002"
-      },
+      "PaymentType": "ProgramAddon",
+      "Amount": 514.516129032258,
+      "PaidDate": "2024-10-17",
+      "DueDate": null,
+      "ReceiptNumber": "dfgh",
+      "ActivittID": "A003",
+      "ProgramTypeID": "P001",
       "Status": "Pending"
     },
     {
-      "id": "AR024",
-      "RequestType": "addTrainingProgram",
+      "id": "AR044",
+      "RequestType": "programAddon",
       "MemberID": "M012",
-      "PaymentDetail": {
-        "id": "P087",
-        "MemberID": "M012",
-        "PaymentType": "ProgramAddon",
-        "Amount": 1548.3870967741934,
-        "PaidDate": "2024-10-16",
-        "DueDate": null,
-        "ReceiptNumber": "rgbed"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 5,
-        "ProgramTypeID": "P002"
-      },
-      "Status": "Pending"
-    },
-    {
-      "id": "AR024",
-      "RequestType": "addTrainingProgram",
-      "MemberID": "M012",
-      "PaymentDetail": {
-        "id": "P087",
-        "MemberID": "M012",
-        "PaymentType": "ProgramAddon",
-        "Amount": 1548.3870967741934,
-        "PaidDate": "2024-10-16",
-        "DueDate": null,
-        "ReceiptNumber": "qwertyu"
-      },
-      "ProgramIDDetails": {
-        "ActivittID": 5,
-        "ProgramTypeID": "P002"
-      },
+      "PaymentType": "ProgramAddon",
+      "Amount": 514.516129032258,
+      "PaidDate": "2024-10-17",
+      "DueDate": null,
+      "ReceiptNumber": "dfgh",
+      "ActivittID": "A003",
+      "ProgramTypeID": "P001",
       "Status": "Pending"
     }
   ],
   "LastId": {
     "id": 1,
-    "MemberId": 14,
-    "AlertID": 4,
-    "EnrollProgramID": 22,
-    "PaymentID": 88,
-    "ActivityID": 7,
-    "ApprovalRequestID": 25
+    "MemberId": 20,
+    "AlertID": 14,
+    "EnrollProgramID": 30,
+    "PaymentID": 111,
+    "ActivityID": 8,
+    "ApprovalRequestID": 45
   }
 }

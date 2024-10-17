@@ -34,7 +34,7 @@
     }
 
     #add-new-member-button:hover,
-    .member-management-btn:hover  {
+    .member-management-btn:hover {
         background-color: #218838;
     }
 
@@ -387,6 +387,10 @@
                             <input type="text" id="username" class="form-input" required />
                         </div>
                         <div class="form-group">
+                            <label for="userName">Password:</label>
+                            <input type="text" id="password" class="form-input" required />
+                        </div>
+                        <div class="form-group">
                             <label for="nic">NIC Number:</label>
                             <input type="text" id="nic" class="form-input" />
                         </div>
@@ -425,7 +429,10 @@
                             <label for="emergencyContactNumber">Emergency Contact Mobile Number:</label>
                             <input type="text" id="emergencyContactNumber" class="form-input" required />
                         </div>
-
+                        <div class="form-group">
+                            <label for="profilepic">Profile Picture</label>
+                            <input type="file" id="profilepic" name="profilepic" >
+                        </div>
                         <div id="paymentSummary" class="payment-summary">
                             <p>Initial Payment: Rs 2500.00 <span id="initialPaymentDisplay"></span></p>
                         </div>
@@ -577,6 +584,7 @@
                 document.getElementById('firstName').value = memberToEdit.FirstName;
                 document.getElementById('lastName').value = memberToEdit.LastName;
                 document.getElementById('username').value = memberToEdit.UserName;
+                document.getElementById('password').value = memberToEdit.Password;
                 document.getElementById('nic').value = memberToEdit.NIC;
                 document.getElementById('mobileNumber').value = memberToEdit.Phone;
                 document.getElementById('dob').value = memberToEdit.DoB;
@@ -604,6 +612,7 @@
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             const nic = document.getElementById('nic').value;
             const mobileNumber = document.getElementById('mobileNumber').value;
             const dob = document.getElementById('dob').value;
@@ -611,6 +620,7 @@
             const address = document.getElementById('address').value;
             const emergencyContactName = document.getElementById('emergencyContactName').value;
             const emergencyContactNumber = document.getElementById('emergencyContactNumber').value;
+            const fileInput = document.getElementById('profilepic').files; 
             // const initialPaymentMethod = document.querySelector('input[name="initialPayment"]:checked').value;
 
             // Validation for NIC (12 digits or 9 digits with 'V' or 'X')
@@ -659,6 +669,7 @@
                     FirstName: firstName,
                     LastName: lastName,
                     UserName: username,
+                    Password:password,
                     NIC: nic,
                     Phone: mobileNumber,
                     DoB: dob,
@@ -667,16 +678,30 @@
                     EmergencyContactPrsn: emergencyContactName,
                     EmergencyContact: emergencyContactNumber,
                 };
+                const formData = new FormData();
+                formData.append("id", newMemberId);
+                formData.append("FirstName", firstName);
+                formData.append("LastName", lastName);
+                formData.append("UserName", username);
+                formData.append("Password", password);
+                formData.append("NIC", nic);
+                formData.append("Phone", mobileNumber);
+                formData.append("DoB", dob);
+                formData.append("Gender", gender);
+                formData.append("Adress", address);
+                formData.append("EmergencyContact", emergencyContactNumber);
+                formData.append("EmergencyContactPrsn", emergencyContactName);
+                formData.append("imageFile", fileInput[0]);
 
                 const updateUser = {
                     id: editingMemberId,
                     MemberID: editingMemberId,
                     UserName: username,
-                    Password: mobileNumber,
+                    Password: password,
                     UserRoll: "member"
                 };
 
-                const memberUpdateResponse = await putApi(membersUrl, editingMemberId, updatedMember);
+                const memberUpdateResponse = await putApi(membersUrl, editingMemberId, formData);
                 console.log(memberUpdateResponse)
 
                 const userUpdateresponse = await putApi(usersUrl, editingMemberId, updateUser);
@@ -702,6 +727,7 @@
                     FirstName: firstName,
                     LastName: lastName,
                     UserName: username,
+                    Password:password,
                     NIC: nic,
                     Phone: mobileNumber,
                     DoB: dob,
@@ -710,6 +736,20 @@
                     EmergencyContact: emergencyContactNumber,
                     EmergencyContactPrsn: emergencyContactName,
                 };
+                const formData = new FormData();
+                formData.append("id", newMemberId);
+                formData.append("FirstName", firstName);
+                formData.append("LastName", lastName);
+                formData.append("UserName", username);
+                formData.append("Password", password);
+                formData.append("NIC", nic);
+                formData.append("Phone", mobileNumber);
+                formData.append("DoB", dob);
+                formData.append("Gender", gender);
+                formData.append("Adress", address);
+                formData.append("EmergencyContact", emergencyContactNumber);
+                formData.append("EmergencyContactPrsn", emergencyContactName);
+                formData.append("imageFile", fileInput[0]);
 
                 const newPayment = {
                     id: newPaymentId,
@@ -729,7 +769,7 @@
                     UserRoll: "member"
                 }
 
-                const addMemberRes = await postApi(membersUrl, newMember)
+                const addMemberRes = await postApi(membersUrl, formData)
                 const addUserRes = await postApi(usersUrl, newUser)
                 const addPaymentRes = await postApi(paymentsUrl, newPayment)
 
