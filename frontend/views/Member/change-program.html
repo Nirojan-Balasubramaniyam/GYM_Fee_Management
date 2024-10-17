@@ -2,7 +2,7 @@
     #programSelection h2,
     h3 {
         color: #2c3e50;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         text-align: center;
     }
 
@@ -12,7 +12,7 @@
 
     #changeButton,
     #submitButton {
-        margin-top: 20px;
+        margin: 0px auto;
         padding: 10px 20px;
         font-size: 16px;
         background-color: #1abc9c;
@@ -154,14 +154,19 @@
     #changeProgramCard {
         margin-top: 10px;
         background-color: #ecf0f1;
-        max-height: 100vh;
+        max-height: 1000px;
         height: 500px;
-        overflow-y: hidden;
+        overflow-y: auto;
         overflow-x: hidden;
         padding: 20px;
         border-radius: 10px;
         /* width: 100%; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #programForm {
+        align-items: center;
+        justify-content: center;
     }
 </style>
 
@@ -188,6 +193,9 @@
                                 </div>
                             </div>
                         </div>
+                        <p id="currentPayment"></p>
+                        <p id="nextPayment"></p>
+                        <p id="newEnrolledCost"></p>
                         <button type="button" id="changeButton" class="btn">Change Programs</button>
                     </form>
 
@@ -277,11 +285,11 @@
                 label.innerHTML = `${activity.ActivityName} - Rs ${activity.Cost}`;
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.value = activity.ActivittID;
+                checkbox.value = activity.id;
                 checkbox.dataset.cost = activity.Cost;
                 checkbox.classList.add('program-checkbox');
 
-                const isEnrolled = enrolledPrograms.some(enrolled => enrolled.MemberID === loggedInUser.id && enrolled.ActivittID === activity.ActivittID);
+                const isEnrolled = enrolledPrograms.some(enrolled => enrolled.MemberID === loggedInUser.id && enrolled.ActivittID === activity.id);
                 if (isEnrolled) {
                     checkbox.checked = true;
                 }
@@ -319,6 +327,7 @@
                         document.getElementById('changeButton').disabled = false;
                     }
                     calculateCosts();
+
                 });
 
                 label.prepend(checkbox);
@@ -358,19 +367,22 @@
             let receiptNumber = document.getElementById("receiptNumber").value;
 
             const today = new Date().toISOString().split('T')[0];
-
-            if (unselectedPrograms > 0) {
+            console.log(unselectedPrograms.length)
+            if (unselectedPrograms.length > 0) {
+                console.log("dff")
                 for (const program of unselectedPrograms) {
                     let removalEnrolledProgram = enrolledPrograms.find(p => p.ActivittID === program.ActivittID && p.MemberID === loggedInUser.id)
                     const removeRequest = {
                         id: generateID("AR", lastIds.ApprovalRequestID),
-                        RequestType: "removeTrainingProgram",
+                        RequestType: "leaveProgram",
                         MemberID: loggedInUser.id,
-                        ProgramIDDetails: removalEnrolledProgram.id,
+                        leavedEmrollId: removalEnrolledProgram.id,
                         Status: "Pending"
                     };
-                    await postApi(approvalRequestsUrl, removeRequest)
+                    const response = await postApi(approvalRequestsUrl, removeRequest);
+                    console.log("aaa")
                     if (response.ok) {
+                    console.log("bbb")
                         alert("Request Submitted sccessfully for admin approval")
                         lastIds.ApprovalRequestID++;
                         await updateLastId(lastIds);
@@ -385,21 +397,15 @@
                     for (const program of newlySelectedProgram) {
                         const addRequest = {
                             id: generateID("AR", lastIds.ApprovalRequestID),
-                            RequestType: "addTrainingProgram",
+                            RequestType: "programAddon",
                             MemberID: loggedInUser.id,
-                            PaymentDetail: {
-                                id: generateID("P", lastIds.PaymentID),
-                                MemberID: loggedInUser.id,
-                                PaymentType: "ProgramAddon",
-                                Amount: proratedNewlySelectedCost,
-                                PaidDate: today,
-                                DueDate: null,
-                                ReceiptNumber: receiptNumber
-                            },
-                            ProgramIDDetails: {
-                                ActivittID: program.ActivittID,
-                                ProgramTypeID: program.TypeID
-                            },
+                            PaymentType: "ProgramAddon",
+                            Amount: proratedNewlySelectedCost,
+                            PaidDate: today,
+                            DueDate: null,
+                            ReceiptNumber: receiptNumber,
+                            ActivittID: program.id,
+                            ProgramTypeID: program.TypeID,
                             Status: "Pending"
                         };
 
@@ -407,8 +413,6 @@
                         console.log(response)
                         if (response.ok) {
                             alert("Request Submitted sccessfully for admin approval")
-                            console.log("bfgns")
-                            lastIds.PaymentID++;
                             lastIds.ApprovalRequestID++;
                             await updateLastId(lastIds);
                         } else {
@@ -420,6 +424,7 @@
                 }
             }
             document.getElementById('popup').style.display = 'none';
+            location.reload();
         });
 
         function calculateCosts() {
@@ -428,7 +433,7 @@
             previousCost = 0;
             enrolledPrograms.forEach(enrolledProgram => {
                 if (enrolledProgram.MemberID === loggedInUser.id) {
-                    const program = allPrograms.find(p => p.ActivittID === enrolledProgram.ActivittID);
+                    const program = allPrograms.find(p => p.id === enrolledProgram.ActivittID);
                     if (program) {
                         previousCost += program.Cost;
                     }
@@ -436,7 +441,7 @@
             });
 
             const totalselectedPrograms = Array.from(document.querySelectorAll('#trainingProgramSelection input:checked')).map(input => {
-                return allPrograms.find(p => p.ActivittID == input.value);
+                return allPrograms.find(p => p.id == input.value);
             });
 
 

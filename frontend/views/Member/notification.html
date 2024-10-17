@@ -60,14 +60,26 @@
     document.addEventListener("DOMContentLoaded", async () => {
         const membersUrl = "http://localhost:7000/Members";
         const alertsUrl = "http://localhost:7000/Alerts";
+        const enrolledTrainingProgramsUrl = "http://localhost:7000/EnrolledTrainingPrograms";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+
         let alerts = [];
         let members = [];
+        let enrolledPrograms = [];
+        let trainingProgramActivities = [];
+
 
         const memberResponse = await fetch(membersUrl);
         members = await memberResponse.json();
 
         const alertsResponse = await fetch(alertsUrl);
         alerts = await alertsResponse.json();
+
+        const enrolledProgramsResponse = await fetch(enrolledTrainingProgramsUrl);
+        enrolledPrograms = await enrolledProgramsResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        trainingProgramActivities = await activitiesResponse.json();
 
         function displayNotification() {
             const notificationTableBody = document.getElementById('notificationTableBody');
@@ -83,15 +95,50 @@
                 notificationTableBody.appendChild(noNotificationtRow);
                 return;
             }
-            let order=1;
-            memberAlerts.forEach(alert => {                
-                if (alert.Status) {
-                    const row = document.createElement('tr');
-                    row.classList.add('notification-table-row');
-                    row.innerHTML = `<td>${order}. You have the ${alert.AlertType} alert of Rs ${alert.Amount}  :  Due Date is ${alert.DueDate} </td> `;
-                    notificationTableBody.appendChild(row);
-                    order++;
+            
+            memberAlerts.forEach(alert => {
+                let programName;
+                let findedActivity;
+                const row = document.createElement('tr');
+                row.classList.add('notification-table-row');
+                if (alert.programOrEnrollid) {
+                    console.log(alert)
+                    console.log(alert.programOrEnrollid)
+                    findedActivity = trainingProgramActivities.find(program => program.ActivittID === alert.programOrEnrollid);
+                    programName = findedActivity.ActivityName;
+
                 }
+                if (alert.Status) {
+                    // const row = document.createElement('tr');
+                    // row.classList.add('notification-table-row');
+                    if (alert.AlertType === 'overdue' || alert.AlertType === 'renewal') {
+                        row.innerHTML = `<td> You have the ${alert.AlertType} alert of Rs ${alert.Amount}  :  Due Date is ${alert.DueDate} </td> `;
+                    } else if (alert.AlertType === 'paymentrequestMessage') {
+                        row.innerHTML = `<td> Your Payment Request of Rs ${alert.Amount} was accepted!  :  Next Due Date is ${alert.DueDate} </td> `;
+                    } else if (alert.AlertType === 'leaveProgramRequestMessage') {
+                        row.innerHTML = `<td> Your Leave Request of activity ${programName} was accepted! </td> `;
+                    } else if (alert.AlertType === 'programAddonRequestMessage') {
+                        row.innerHTML = `<td> Your Enroll Program Request of activity ${programName} was accepted! </td> `;
+                    } else if (alert.AlertType === 'memberInfoRequestMessage') {
+                        row.innerHTML = `<td> Your Member Information Change Request was accepted! </td> `;
+                    }
+
+                } else if (!alert.Status) {
+                    // const row = document.createElement('tr');
+                    // row.classList.add('notification-table-row');
+
+                    if (alert.AlertType === 'paymentrequestMessage') {
+                        row.innerHTML = `<td> Your Payment Request of Rs ${alert.Amount} was declined!</td> `;
+                    } else if (alert.AlertType === 'leaveProgramRequestMessage') {
+                        row.innerHTML = `<td> Your Leave Request of activity ${programName} was declined!</td> `;
+                    } else if (alert.AlertType === 'programAddonRequestMessage') {
+                        row.innerHTML = `<td> Your Enroll Program Request of activity ${programName} was declined!</td> `;
+                    } else if (alert.AlertType === 'memberInfoRequestMessage') {
+                        row.innerHTML = `<td> Your Member Information Change Request was declined! </td> `;
+                    }
+                }
+
+                notificationTableBody.appendChild(row);
             });
         }
         displayNotification();

@@ -46,6 +46,10 @@
         /* width: 100%; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
+    #content {
+        overflow-y: scroll;
+    }
 </style>
 
 <section id="content">
@@ -106,50 +110,26 @@
         }
 
         document.getElementById('changeInfoButton').addEventListener('click', async () => {
-            //fetchLastId();
-            let lastApprovalId = lastIds.ApprovalRequestID;
-
-            const generateID = () => {
-                const prefix = "AR";
-                const number = lastApprovalId.toString().padStart(3, '0');
-                lastApprovalId++;
-                lastIds.ApprovalRequestID = lastApprovalId;
-                updateLastId(lastIds);
-                return prefix + number;
-            };
-
-            const updateLastId = async (updatedLastIds) => {
-                try {
-                    await fetch(`${lastIdUrl}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(updatedLastIds)
-                    });
-                } catch (error) {
-                    console.error("Error updating LastId:", error);
-                }
-            };
 
             const newApprovalRequest = {
-                id: generateID(),
-                RequestType: "memberInfoChange",
+                id: generateID("AR", lastIds.ApprovalRequestID),
+                RequestType: "changeMemberInfo",
                 MemberID: loggedInUser.id,
-                NewEnrollProgramIDDetails: {
-                    FirstName: document.getElementById('firstName').value,
-                    LastName: document.getElementById('lastName').value,
-                    Phone: document.getElementById('phone').value,
-                    NIC: document.getElementById('nic').value,
-                },
-                Status: "Pending"
+                FirstName: document.getElementById('firstName').value,
+                LastName: document.getElementById('lastName').value,
+                Phone: document.getElementById('phone').value,
+                NIC: document.getElementById('nic').value,
+                Status: "pending"
             };
 
-            const postResponse = await fetch(approvalRequestsUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newApprovalRequest)
-            });
+            const postResponse = await postApi(approvalRequestsUrl,newApprovalRequest);
+            if(postResponse.ok){
+                lastIds.ApprovalRequestID++;
+                updateLastId(lastIds);
+                alert('Your information change request has been sent to admin for approval!');
+                location.reload();
+            }
 
-            alert('Your information change request has been sent to admin for approval!');
         });
     })
 </script>
