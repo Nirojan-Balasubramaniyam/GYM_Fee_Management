@@ -144,18 +144,24 @@
             });
         };
 
-        const generateListItems = (programs, activities, typeId) => {
-            const filteredPrograms = programs.filter(program => program.ProgramTypeID === typeId);
+        function generateListItems(programs, activities, typeId) {
+            const filteredPrograms = programs.filter(program => {
+                const activity = activities.find(activity => activity.id === program.ActivittID);
+              
+                console.log(activity)
+                return activity && activity.TypeID === typeId;
+            });
+            console.log(filteredPrograms)
 
             if (filteredPrograms.length === 0) {
-                return typeId === "P001" ? '<div class="training-program-item">No cardio programs enrolled</div>' : '<div class="training-program-item">No weight training programs enrolled</div>';
+                return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
             }
 
             return filteredPrograms.map(program => {
-                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
-                return activity ? `<div class="training-program-item">${activity.ActivityName}</div>` : '<div class="training-program-item">No matching activity</div>';
-            }).join('');
-        };
+                const activity = activities.find(activity => activity.id === program.ActivittID);
+                return activity ? activity.ActivityName : 'No matching activity';
+            }).join(', ');
+        }
 
         displayMembersReport();
     })
