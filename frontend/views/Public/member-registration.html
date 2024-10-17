@@ -1,0 +1,319 @@
+<style>
+    /* Section and form container styling */
+    section {
+        position: fixed;
+        top: 90px;
+        right: 30px;
+        height: 100vh;
+        background-color: #f4f4f4;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: row;
+        /* width: 100%; */
+    }
+
+    .memberForm-content {
+        background-color: #ffffff;
+        padding:0px 40px 0px 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* width: 100%; */
+        width: 1000px;
+        /* display: flex;
+        flex-direction: column;
+        justify-content: center; */
+    }
+
+    /* Form styling */
+    .member-form {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+    }
+
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-part1,
+    .form-part2,
+    .form-part3 {
+        margin: 20px;
+        width: 400px;
+    }
+
+    /* Label styling */
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Input field styling */
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        border-color: #007BFF;
+        /* Highlight border on focus */
+        outline: none;
+    }
+
+    /* Radio buttons group styling */
+    .form-radio-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-radio-group label {
+        font-size: 14px;
+    }
+
+    /* Payment summary styling */
+    .payment-summary {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #555;
+    }
+
+    /* Submit button styling */
+    .form-submit-btn {
+        background-color: #007BFF;
+        color: white;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-submit-btn:hover {
+        background-color: #0056b3;
+        /* Darker blue on hover */
+    }
+    #paymentSummary p{
+        font-weight: bold;
+        color: green;
+    }
+    #registrationInfo{
+        margin: 20px;
+        width: 400px;
+    }
+    .form-submit-btn, #addMessage{
+        margin-left: 350px;
+    }
+</style>
+
+<section>
+    <div id="registrationInfo">
+        <h1>Please fill out the form and <br> <b style="color: orangered;">Click</b> <br><span style="color: #007BFF;">Button: Send approval for Member Registration Button</span></h1>
+        <p>Your member registration request will be checked and approved by the admin</p>
+    </div>
+    <div class="memberForm-content">
+        <form id="memberForm" class="member-form">
+            <div class="form-part1">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="userName">User Name:</label>
+                    <input type="text" id="username" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="nic">NIC Number:</label>
+                    <input type="text" id="nic" class="form-input" />
+                </div>
+            </div>
+
+            <div class="form-part3">
+                <div class="form-group">
+                    <label for="mobileNumber">Mobile Number:</label>
+                    <input type="text" id="mobileNumber" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" class="form-select" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" class="form-input" required />
+                </div>
+            </div>
+
+            <div class="form-part2">
+                <div class="form-group">
+                    <label for="emergencyContactName">Emergency Contact Name:</label>
+                    <input type="text" id="emergencyContactName" class="form-input" required />
+                </div>
+                <div class="form-group">
+                    <label for="emergencyContactNumber">Emergency Contact Mobile Number:</label>
+                    <input type="text" id="emergencyContactNumber" class="form-input" required />
+                </div>
+
+                <div id="paymentSummary" class="payment-summary">
+                    <p>Initial Payment: Rs 2500.00 <span id="initialPaymentDisplay"></span></p>
+                </div>
+                <div class="form-group">
+                    <label>Initial Payment Recipt Number:</label>
+                   <input type="text" id="receiptNumber" class="form-input" required>
+                </div>
+            </div>
+        </form>
+        <button type="submit" id="addMemberBtn" class="form-submit-btn">Send approval for Member Registration</button>
+        <h3 id="addMessage" style="color: green;"></h3>
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async()=>{
+        const approvalRequestsUrl = "http://localhost:7000/ApprovalRequests";
+        const lastIdUrl = "http://localhost:7000/LastId";
+
+        let approvalRequests = [];
+        let lastIds = [];
+
+        const approvalResponse = await fetch(approvalRequestsUrl);
+        approvalRequests = await approvalResponse.json();
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        document.getElementById("addMemberBtn").addEventListener("click", async(event)=>{
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('username').value;
+            const nic = document.getElementById('nic').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const address = document.getElementById('address').value;
+            const emergencyContactName = document.getElementById('emergencyContactName').value;
+            const emergencyContactNumber = document.getElementById('emergencyContactNumber').value;
+            const paymentReceiptNumber =   document.getElementById('receiptNumber').value;
+
+                        // Validation for NIC (12 digits or 9 digits with 'V' or 'X')
+                        const nicRegex = /^(?:\d{9}[vVxX]|\d{12})$/;
+            if (!nicRegex.test(nic)) {
+                alert("NIC must be 12 digits or 9 digits followed by 'V' or 'X'.");
+                document.getElementById('nic').style.border = "2px solid red"; // Highlight error
+                return;
+            } else {
+                document.getElementById('nic').style.border = ""; // Reset if valid
+            }
+
+            // Validation for mobile number (10 digits)
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(mobileNumber)) {
+                alert("Mobile number must be exactly 10 digits.");
+                document.getElementById('mobileNumber').style.border = "2px solid red"; 
+                return;
+            } else {
+                document.getElementById('mobileNumber').style.border = ""; 
+            }
+
+            // Validation for emergency contact number (10 digits)
+            if (!phoneRegex.test(emergencyContactNumber)) {
+                alert("Emergency contact number must be exactly 10 digits.");
+                document.getElementById('emergencyContactNumber').style.border = "2px solid red"; 
+                return;
+            } else {
+                document.getElementById('emergencyContactNumber').style.border = ""; 
+            }
+
+            // Validation for DOB (must be greater than today's date)
+            const dobDate = new Date(dob);
+            const today = new Date();
+            if (dobDate >= today) {
+                alert("Date of Birth must be a past date.");
+                document.getElementById('dob').style.border = "2px solid red"; 
+                return;
+            } else {
+                document.getElementById('dob').style.border = ""; 
+            }
+
+            const newApprovalRequest = {
+                id: generateID("AR", lastIds.ApprovalRequestID),
+                RequestType: "newMemberRequest",
+                FirstName: firstName,
+                LastName: lastName,
+                UserName:username,
+                NIC: nic,
+                Phone:mobileNumber,
+                DOB:dob,
+                Gender: gender,
+                Address:address,
+                EmergencyContactName: emergencyContactName,
+                EmergencyContactNumber: emergencyContactNumber,
+                PaymentReceiptNumber:paymentReceiptNumber,
+                PaidDate : new Date().toISOString().split('T')[0],
+                Status: "Pending"
+            };
+
+            const postResponse = await postApi(approvalRequestsUrl,newApprovalRequest);
+            if(postResponse.ok){
+                lastIds.ApprovalRequestID++;
+                updateLastId(lastIds);
+                document.getElementById("addMessage").innerHTML=`Your Add Member Reuest Send to Admin Approval`;
+                document.getElementById("memberForm").reset();
+                // event.target.reset();
+                //location.reload();
+            }
+        })
+
+        const generateID = (prefix, lastId) => {
+            const number = lastId.toString().padStart(3, '0');
+            return `${prefix}${number}`;
+        };
+
+        async function updateLastId(arr) {
+            const response = await fetch(`http://localhost:7000/LastId`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(arr)
+            });
+        }
+
+        async function postApi(url, arr) {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(arr)
+            });
+            return response;
+        }
+    })
+
+</script>
