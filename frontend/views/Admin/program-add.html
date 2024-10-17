@@ -1,0 +1,142 @@
+<style>
+    #programForm input {
+        background-color: white;
+    }
+
+    .paymentCard h2,
+    h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #programForm input,
+    #programForm select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #programForm input:focus,
+    #programForm select:focus {
+        outline: none;
+        border-color: #1abc9c;
+    }
+
+    #programForm button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1abc9c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #programForm button:hover {
+        background-color: #16a085;
+    }
+
+    #programAddSection {
+        margin-top: 20px;
+    }
+
+    #addProgramCard {
+        margin-top: 70px;
+        background-color: #ecf0f1;
+        max-height: 100vh;
+        height: 500px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        padding: 20px;
+        border-radius: 10px;
+        /* width: 100%; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section id="content">
+    <h2 id="contentTitle">Add Training Programs</h2>
+    <div id="addProgramCard">
+        <div class="row">
+            <div class="col-12">
+                <div id="programAddSection">
+                    <form id="programForm">
+
+                        <label for="receiptNumber">Program Name:</label>
+                        <input type="text" id="programName" placeholder="Enter Program Name" required>
+
+                        <label for="amount">Monthly Cost (LKR):</label>
+                        <input type="number" id="amount" placeholder="Enter amount" required>
+
+                        <select id="typeSelect" class="form-input"></select>
+
+                        <button type="submit" class="btn">Add Program</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const lastIdUrl = "http://localhost:7000/LastId";
+        const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
+        const trainingProgramTypesUrl = "http://localhost:7000/TrainingProgramTypes";
+
+        let lastIds = [];
+        let enrolledPrograms = [];
+        let trainingProgramTypes = [];
+
+        const lastidsResponse = await fetch(lastIdUrl);
+        lastIds = await lastidsResponse.json();
+
+        const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
+        allPrograms = await activitiesResponse.json();
+
+        const programTypeResponse = await fetch(trainingProgramTypesUrl);
+        trainingProgramTypes = await programTypeResponse.json();
+
+
+        const typeSelect = document.getElementById('typeSelect');
+        typeSelect.innerHTML = '';
+        let defaultTypeOption = document.createElement('option');
+        defaultTypeOption.text = "Select Type";
+        defaultTypeOption.value = "P001";
+        typeSelect.appendChild(defaultTypeOption);
+
+        trainingProgramTypes.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type.id;
+            option.text = capitalizeFirstLetter(type.ProgramTypeName);
+            typeSelect.appendChild(option);
+        });
+
+        document.getElementById("programForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            let activityName = document.getElementById("programName").value;
+            let activityCost = document.getElementById("amount").value;
+            let activityType = document.getElementById("typeSelect").value;
+
+            const newActivity = {
+                id: generateID("A", lastIds.ActivityID),
+                TypeID: activityType,
+                ActivityName: activityName,
+                Cost: activityCost
+            }
+            let activityAddResponse = await postApi(trainingProgramActivitiesUrl, newActivity);
+            if(activitiesResponse.ok){
+                lastIds.ActivityID++;
+                await updateLastId(lastIds);
+                alert("Training Program Added Successfully");
+                location.reload();
+            }
+
+        })
+    })
+</script>
