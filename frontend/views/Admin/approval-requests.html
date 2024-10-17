@@ -68,7 +68,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         width: 500px;
-        height: 600px;
+        height: 700px;
         padding: 20px;
         background-color: #fff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -130,6 +130,11 @@
     #viewButton :hover {
         background-color: #560904;
     }
+    #nonViewedApprovalsButton{
+        background-color: white;
+        color: darkblue;
+        border: 1px solid darkblue;
+    }
 
     #approvalCard {
         max-height: 100vh;
@@ -142,7 +147,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    #approvalRequestsSection button {
+    #viewedApprovalsButton {
         background-color: #f44336;
         color: white;
     }
@@ -269,7 +274,7 @@
             approvalRequests.forEach((request) => {
                 if ((filterApprovalTable === 'viewed' && (request.Status === 'accepted' || request.Status === 'rejected')) ||
                     (filterApprovalTable === 'non-viewed' && request.Status === 'pending')) {
-                        console.log(request)
+                    console.log(request)
                     const row = document.createElement('tr');
 
                     const idCell = document.createElement('td');
@@ -306,13 +311,33 @@
 
         function openModal(request) {
             currentRequest = request;
-            requestDetailsDiv.innerHTML = '';
+            requestDetailsDiv.innerHTML = '';    
+
+            const table = document.createElement('table');
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
 
             Object.keys(request).forEach((key) => {
-                const detail = document.createElement('p');
-                detail.textContent = `${key}: ${JSON.stringify(request[key], null, 2)}`;
-                requestDetailsDiv.appendChild(detail);
+                const row = document.createElement('tr');
+
+                const keyCell = document.createElement('th');
+                keyCell.textContent = key;
+                keyCell.style.border = '1px solid #ddd';
+                keyCell.style.padding = '8px';
+                keyCell.style.textAlign = 'left';
+                keyCell.style.backgroundColor = '#f2f2f2';
+
+                const valueCell = document.createElement('td');
+                valueCell.textContent = JSON.stringify(request[key], null, 2).replace(/^"|"$/g, '');
+                valueCell.style.border = '1px solid #ddd';
+                valueCell.style.padding = '8px';
+
+                row.appendChild(keyCell);
+                row.appendChild(valueCell);
+                table.appendChild(row);
             });
+
+            requestDetailsDiv.appendChild(table);
             if (request.Status === "rejected" || request.Status === "accepted") {
                 document.getElementById("acceptBtn").style.display = "none";
                 document.getElementById("rejectBtn").style.display = "none";
@@ -374,31 +399,31 @@
         async function handleNewMemberRequest(request) {
             let memberId = generateID("M", lastIds.MemberId)
             const newMember = {
-                    id: memberId,
-                    FirstName: request.FirstName,
-                    LastName: request.LastName,
-                    UserName: request.UserName,
-                    NIC: request.NIC,
-                    Phone: request.Phone,
-                    DoB: request.Gender,
-                    Gender: request.DOB,
-                    Adress: request.Address,
-                    EmergencyContact: request.EmergencyContactName,
-                    EmergencyContactPrsn: request.EmergencyContactNumber,
-                };
+                id: memberId,
+                FirstName: request.FirstName,
+                LastName: request.LastName,
+                UserName: request.UserName,
+                NIC: request.NIC,
+                Phone: request.Phone,
+                DoB: request.Gender,
+                Gender: request.DOB,
+                Adress: request.Address,
+                EmergencyContact: request.EmergencyContactName,
+                EmergencyContactPrsn: request.EmergencyContactNumber,
+            };
 
-                const newPayment = {
-                    id: generateID("P", lastIds.PaymentID),
-                    MemberID: memberId,
-                    PaymentType: "Initial",
-                    Amount: 2500,
-                    PaymentMethod: "Bank",
-                    PaidDate: request.PaidDate,
-                    DueDate: null,
-                };
+            const newPayment = {
+                id: generateID("P", lastIds.PaymentID),
+                MemberID: memberId,
+                PaymentType: "Initial",
+                Amount: 2500,
+                PaymentMethod: "Bank",
+                PaidDate: request.PaidDate,
+                DueDate: null,
+            };
             let addMemberResponse = await postApi(membersUrl, newMember);
             let addPaymentResponse = await postApi(paymentsUrl, newPayment);
-            if(addMemberResponse.ok && addPaymentResponse.ok){
+            if (addMemberResponse.ok && addPaymentResponse.ok) {
                 lastIds.PaymentID++;
                 lastIds.MemberId++;
                 updateLastId(lastIds);
