@@ -141,12 +141,16 @@
                     <input type="text" id="username" class="form-input" required />
                 </div>
                 <div class="form-group">
-                    <label for="nic">NIC Number:</label>
-                    <input type="text" id="nic" class="form-input" />
+                    <label for="userName">Password:</label>
+                    <input type="text" id="password" class="form-input" required />
                 </div>
             </div>
 
             <div class="form-part3">
+                <div class="form-group">
+                    <label for="nic">NIC Number:</label>
+                    <input type="text" id="nic" class="form-input" />
+                </div>
                 <div class="form-group">
                     <label for="mobileNumber">Mobile Number:</label>
                     <input type="text" id="mobileNumber" class="form-input" required />
@@ -162,13 +166,14 @@
                         <option value="female">Female</option>
                     </select>
                 </div>
+
+            </div>
+
+            <div class="form-part2">
                 <div class="form-group">
                     <label for="address">Address:</label>
                     <input type="text" id="address" class="form-input" required />
                 </div>
-            </div>
-
-            <div class="form-part2">
                 <div class="form-group">
                     <label for="emergencyContactName">Emergency Contact Name:</label>
                     <input type="text" id="emergencyContactName" class="form-input" required />
@@ -213,6 +218,7 @@
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const username = document.getElementById('username').value;
+            document.getElementById('password').value = memberToEdit.Password;
             const nic = document.getElementById('nic').value;
             const mobileNumber = document.getElementById('mobileNumber').value;
             const dob = document.getElementById('dob').value;
@@ -268,6 +274,7 @@
                 FirstName: firstName,
                 LastName: lastName,
                 UserName:username,
+                Password:password,
                 NIC: nic,
                 Phone:mobileNumber,
                 DOB:dob,
