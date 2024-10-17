@@ -63,6 +63,7 @@
             padding: 0px;
             height: 170px;
         }
+        
     </style>
 
     <link rel="stylesheet" href="../static/css/admin-style.css">
@@ -78,6 +79,7 @@
             <li><a href="/admin" id="dashboardBtn">Dashboard</a></li>
             <li><a href="/member-management" id="membersBtn">Members Management</a></li>
             <li><a href="/enroll-program" id="enrollProgramBtn">Enroll Programs</a></li>
+            <li><a href="/program-add" >Add Programs</a></li>
             <li><a href="/payment" id="paymentBtn">Payment</a></li>
             <li><a href="/approval-requests" id="approvalRequestBtn">Approval Requests</a></li>
 
@@ -93,7 +95,7 @@
                     </ul>
                 </div>
             </li>
-            <li><a href="/logout" id="logoutBtn">Logout</a></li>
+            <li><a href="/logout"><button  id="logoutBtn">Logout</button></a></li>
 
         </ul>
     </aside>
@@ -126,11 +128,11 @@
             let userName = document.getElementById('adminName');
             userName.innerHTML = capitalizeFirstLetter(loggedInUser.UserName);
 
-            await addNewAlerts(payments,alerts);
+            await addNewAlerts(payments, alerts);
 
             async function addNewAlerts(payments, alerts) {
                 const today = new Date();
-                const filterdPayments = payments.filter(payment => payment.PaymentType !== 'ProgramAddon'&& payment.PaymentType !== 'Initial');
+                const filterdPayments = payments.filter(payment => payment.PaymentType !== 'ProgramAddon' && payment.PaymentType !== 'Initial');
                 const lastPayments = filterdPayments.reduce((acc, payment) => {
                     const memberId = payment.MemberID;
                     if (!acc[memberId]) {
@@ -152,6 +154,19 @@
 
                     const lastDueDate = new Date(lastPayment.DueDate);
                     const daysBeforeDue = Math.ceil((lastDueDate - today) / (1000 * 60 * 60 * 24));
+                    console.log(memberId)
+                    const memberRenewalAlerts = alerts.filter(alert => alert.MemberID === memberId && alert.AlertType === "renewal");
+                    console.log(memberRenewalAlerts)
+
+                    // If renewal alerts exist, check if they are overdue and update the status to false
+                    for (const renewalAlert of memberRenewalAlerts) {
+                        const renewalDueDate = new Date(renewalAlert.DueDate);
+                        if (renewalDueDate < today && renewalAlert.Status === true) {
+                            renewalAlert.Status = false;
+                            await putApi(alertsUrl, renewalAlert.id, renewalAlert);
+                            console.log(`Renewal alert status updated to false for MemberID: ${renewalAlert.MemberID}, AlertID: ${renewalAlert.id}`);
+                        }
+                    }
 
                     const existingOverdueAlert = alerts.find(alert => alert.MemberID === memberId && alert.AlertType === "overdue");
                     if (lastDueDate < today && !existingOverdueAlert) {
@@ -159,6 +174,7 @@
                             id: generateID("AT", lastIds.AlertID),
                             AlertType: "overdue",
                             Amount: lastPayment.Amount,
+                            programOrEnrollid: null,
                             DueDate: lastPayment.DueDate,
                             MemberID: lastPayment.MemberID,
                             Status: true
@@ -176,6 +192,7 @@
                             id: generateID("AT", lastIds.AlertID),
                             AlertType: "renewal",
                             Amount: lastPayment.Amount,
+                            programOrEnrollid: null,
                             DueDate: lastPayment.DueDate,
                             MemberID: lastPayment.MemberID,
                             Status: true
@@ -191,7 +208,6 @@
             }
         });
 
-
         const sidebar = document.getElementById('sidebar');
         //const closeBtn = document.getElementById('closeBtn');
         //const contentArea = document.getElementById('contentArea');
@@ -203,8 +219,6 @@
             contentArea.classList.remove('expanded-content');
             toggleButton.style.display = 'none';
         });
-
-
 
         async function postApi(url, arr) {
             const response = await fetch(url, {
@@ -254,7 +268,7 @@
         };
 
         function capitalizeFirstLetter(string) {
-            return string.split('_').map(word => {
+            return string.split(' ').map(word => {
                 return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join('');
         }
