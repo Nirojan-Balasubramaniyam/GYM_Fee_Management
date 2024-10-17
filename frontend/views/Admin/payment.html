@@ -107,6 +107,10 @@
             <div id="payment-method-container">
                 <form>
                     <input type="number" id="paymentAmountInput" placeholder="Enter payment amount">
+                    <div>
+                        <select id="monthsSelect" class="form-input">
+                        </select>
+                    </div>
                     <label>Select payment method</label>
                     <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label>
                     <label><input type="radio" name="paymentMethod" value="Card"> Card</label>
@@ -131,9 +135,7 @@
             </div>
             <div class="member-training-program">
                 <p>Training programs :
-                <div id="trainingProgramsDisplay">
-
-                </div>
+                <div id="trainingProgramsDisplay">  </div>
                 </p>
             </div>
         </div>
@@ -148,12 +150,15 @@
         const paymentsUrl = "http://localhost:7000/Payments";
         const trainingProgramActivitiesUrl = "http://localhost:7000/TrainingProgramActivities";
         const lastIdUrl = "http://localhost:7000/LastId";
+        const alertsUrl = "http://localhost:7000/Alerts";
+        let alerts = [];
 
         let members = [];
         let enrolledPrograms = [];
         let trainingProgramActivities = [];
         let payments = [];
         let lastIds = [];
+        let enrollMonths = [{ period: 1, discount: 0 }, { period: 3, discount: 10 }, { period: 6, discount: 15 }, { period: 12, discount: 25 },];
         let finalAmount = 0;
 
         const paymentResponse = await fetch(paymentsUrl);
@@ -161,6 +166,9 @@
 
         const memberResponse = await fetch(membersUrl);
         members = await memberResponse.json();
+
+        const alertsResponse = await fetch(alertsUrl);
+        alerts = await alertsResponse.json();
 
         const activitiesResponse = await fetch(trainingProgramActivitiesUrl);
         trainingProgramActivities = await activitiesResponse.json();
@@ -170,6 +178,21 @@
 
         const lastidsResponse = await fetch(lastIdUrl);
         lastIds = await lastidsResponse.json();
+
+
+        const monthSelect = document.getElementById('monthsSelect');
+        monthSelect.innerHTML = '';
+        let defaultMonthOption = document.createElement('option');
+        defaultMonthOption.text = "Select Month";
+        defaultMonthOption.value = 1;
+        monthSelect.appendChild(defaultMonthOption);
+
+        enrollMonths.forEach(month => {
+            const option = document.createElement('option');
+            option.value = month.period;
+            option.text = `${month.period} - Discount ${month.discount} %`;
+            monthSelect.appendChild(option);
+        });
 
         document.getElementById('searchUserBtn').addEventListener('click', () => {
             const searchValue = document.getElementById('searchUserInput').value.toLowerCase();
@@ -222,6 +245,7 @@
                 finalAmount = calculateDiscountedAmount(totalPayment, selectedMonths);
                 const paymentAmount = document.getElementById('paymentAmountInput').value = finalAmount;
             });
+
 
             if (memberPayments.length > 0) {
                 const lastPayment = memberPayments.sort((a, b) => new Date(b.PaidDate) - new Date(a.PaidDate))[0];
@@ -305,7 +329,7 @@
             const newPayment = {
                 id: newPaymentId,
                 MemberID: memberId,
-                PaymentType: paymentType,  // Use calculated payment type
+                PaymentType: paymentType,  
                 Amount: finalAmount,
                 PaidDate: paidDate.toISOString().split('T')[0],
                 DueDate: dueDate.toISOString().split('T')[0],
