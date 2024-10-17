@@ -545,7 +545,7 @@
             }
 
             return filteredPrograms.map(program => {
-                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                const activity = activities.find(activity => activity.id === program.ActivittID);
                 return activity ? activity.ActivityName : 'No matching activity';
             }).join(', ');
         }
