@@ -30,6 +30,17 @@
         letter-spacing: 2px;
         /* font-weight: bold; */
     }
+
+    .close-btn {
+        background-color: none;
+        color: orangered;
+        text-decoration: none;
+        font-size: 25px;
+        font-weight: 800;
+        cursor: pointer;
+        margin-left: 20px;
+        padding-left: 20px;
+    }
 </style>
 
 <section id="content">
@@ -85,7 +96,7 @@
             const notificationTableBody = document.getElementById('notificationTableBody');
             notificationTableBody.innerHTML = '';
 
-            const memberAlerts = alerts.filter(alert => alert.MemberID === loggedInUser.id);
+            const memberAlerts = alerts.filter(alert => alert.MemberID === loggedInUser.id && alert.Status===true);
             if (memberAlerts.length === 0) {
                 const noNotificationtRow = document.createElement('tr');
                 const noNotificationtCell = document.createElement('td');
@@ -95,52 +106,68 @@
                 notificationTableBody.appendChild(noNotificationtRow);
                 return;
             }
-            
-            memberAlerts.forEach(alert => {
+
+            memberAlerts.forEach((alert, index) => {
                 let programName;
                 let findedActivity;
                 const row = document.createElement('tr');
                 row.classList.add('notification-table-row');
                 if (alert.programOrEnrollid) {
-                    console.log(alert)
-                    console.log(alert.programOrEnrollid)
-                    findedActivity = trainingProgramActivities.find(program => program.ActivittID === alert.programOrEnrollid);
-                    programName = findedActivity.ActivityName;
-
+                    findedActivity = trainingProgramActivities.find(program => program.id === alert.programOrEnrollid);
+                    programName = findedActivity ? findedActivity.ActivityName : "Unknown Program";
                 }
+
+                let alertContent;
                 if (alert.Status) {
-                    // const row = document.createElement('tr');
-                    // row.classList.add('notification-table-row');
                     if (alert.AlertType === 'overdue' || alert.AlertType === 'renewal') {
-                        row.innerHTML = `<td> You have the ${alert.AlertType} alert of Rs ${alert.Amount}  :  Due Date is ${alert.DueDate} </td> `;
-                    } else if (alert.AlertType === 'paymentrequestMessage') {
-                        row.innerHTML = `<td> Your Payment Request of Rs ${alert.Amount} was accepted!  :  Next Due Date is ${alert.DueDate} </td> `;
-                    } else if (alert.AlertType === 'leaveProgramRequestMessage') {
-                        row.innerHTML = `<td> Your Leave Request of activity ${programName} was accepted! </td> `;
-                    } else if (alert.AlertType === 'programAddonRequestMessage') {
-                        row.innerHTML = `<td> Your Enroll Program Request of activity ${programName} was accepted! </td> `;
-                    } else if (alert.AlertType === 'memberInfoRequestMessage') {
-                        row.innerHTML = `<td> Your Member Information Change Request was accepted! </td> `;
+                        alertContent = `<td> You have the ${alert.AlertType} alert of Rs ${alert.Amount}  :  Due Date is ${alert.DueDate} </td>`;
                     }
-
-                } else if (!alert.Status) {
-                    // const row = document.createElement('tr');
-                    // row.classList.add('notification-table-row');
-
-                    if (alert.AlertType === 'paymentrequestMessage') {
-                        row.innerHTML = `<td> Your Payment Request of Rs ${alert.Amount} was declined!</td> `;
-                    } else if (alert.AlertType === 'leaveProgramRequestMessage') {
-                        row.innerHTML = `<td> Your Leave Request of activity ${programName} was declined!</td> `;
-                    } else if (alert.AlertType === 'programAddonRequestMessage') {
-                        row.innerHTML = `<td> Your Enroll Program Request of activity ${programName} was declined!</td> `;
-                    } else if (alert.AlertType === 'memberInfoRequestMessage') {
-                        row.innerHTML = `<td> Your Member Information Change Request was declined! </td> `;
+                    if (alert.Action) {
+                        if (alert.AlertType === 'paymentrequestMessage') {
+                            alertContent = `<td> Your Payment Request of Rs ${alert.Amount} was accepted!  :  Next Due Date is ${alert.DueDate} </td>`;
+                        } else if (alert.AlertType === 'leaveProgramRequestMessage') {
+                            alertContent = `<td> Your Leave Request of activity ${programName} was accepted! </td>`;
+                        } else if (alert.AlertType === 'programAddonRequestMessage') {
+                            alertContent = `<td> Your Enroll Program Request of activity ${programName} was accepted! </td>`;
+                        } else if (alert.AlertType === 'memberInfoRequestMessage') {
+                            alertContent = `<td> Your Member Information Change Request was accepted! </td>`;
+                        }
+                    } else {
+                        if (alert.AlertType === 'paymentrequestMessage') {
+                            alertContent = `<td> Your Payment Request of Rs ${alert.Amount} was declined!</td>`;
+                        } else if (alert.AlertType === 'leaveProgramRequestMessage') {
+                            alertContent = `<td> Your Leave Request of activity ${programName} was declined!</td>`;
+                        } else if (alert.AlertType === 'programAddonRequestMessage') {
+                            alertContent = `<td> Your Enroll Program Request of activity ${programName} was declined!</td>`;
+                        } else if (alert.AlertType === 'memberInfoRequestMessage') {
+                            alertContent = `<td> Your Member Information Change Request was declined! </td>`;
+                        }
                     }
                 }
 
+                // Add the close (X) button if it's not an 'overdue' or 'renewal' type
+                if (alert.AlertType !== 'overdue' && alert.AlertType !== 'renewal') {
+                    alertContent += `<td><a class="close-btn" data-index="${index}">&times;</a></td>`;
+                }
+
+                row.innerHTML = alertContent;
                 notificationTableBody.appendChild(row);
             });
+
+            // Add event listeners to close buttons
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const alertIndex = this.getAttribute('data-index');
+                    console.log(alertIndex)
+                    console.log(memberAlerts[alertIndex])
+                    memberAlerts[alertIndex].Status = false;
+                    putApi(alertsUrl, memberAlerts[alertIndex].id, memberAlerts[alertIndex])  // Update alert status to false
+                    displayNotification();  // Re-render notifications
+                });
+            });
         }
+
         displayNotification();
     })
 </script>
