@@ -346,6 +346,8 @@
             viewModal.style.display = 'block';
         };
 
+        const accessedDate = new Date().toLocaleDateString();
+
         document.getElementById('acceptBtn').addEventListener('click', async () => {
             if (currentRequest) {
                 switch (currentRequest.RequestType) {
@@ -383,6 +385,7 @@
                 Amount: null,
                 programOrEnrollid: findedActivityId,
                 DueDate: null,
+                AccessedDate: accessedDate,
                 MemberID: request.MemberID,
                 Action: true,
                 Status: true
@@ -445,6 +448,7 @@
                 programOrEnrollid: request.leavedEmrollId,
                 DueDate: null,
                 MemberID: request.MemberID,
+                AccessedDate: accessedDate,
                 Action: true,
                 Status: true
             }
@@ -488,6 +492,7 @@
                 programOrEnrollid: null,
                 DueDate: null,
                 MemberID: request.MemberID,
+                AccessedDate: accessedDate,
                 Action: true,
                 Status: true
             }
@@ -561,6 +566,7 @@
                 programOrEnrollid: null,
                 DueDate: request.DueDate,
                 MemberID: request.MemberID,
+                AccessedDate: accessedDate,
                 Action: true,
                 Status: true
             }
@@ -588,6 +594,7 @@
                             programOrEnrollid: null,
                             DueDate: currentRequest.DueDate,
                             MemberID: currentRequest.MemberID,
+                            AccessedDate: accessedDate,
                             Action: false,
                             Status: true
                         }
@@ -615,6 +622,7 @@
                             programOrEnrollid: findedActivityId,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
+                            AccessedDate: accessedDate,
                             Action: false,
                             Status: true
                         }
@@ -637,6 +645,7 @@
                             programOrEnrollid: currentRequest.ActivittID,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
+                            AccessedDate: accessedDate,
                             Action: false,
                             Status: true
                         }
@@ -658,6 +667,7 @@
                             programOrEnrollid: null,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
+                            AccessedDate: accessedDate,
                             Action: false,
                             Status: true
                         }
