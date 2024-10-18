@@ -9,9 +9,9 @@
       "Phone": "12344569",
       "DoB": "2000-01-01",
       "Gender": "male",
-      "Adress": "undefined",
-      "EmergencyContactPrsn": "undefined",
-      "EmergencyContact": "undefined"
+      "Adress": "xyz",
+      "EmergencyContactPrsn": "kumar",
+      "EmergencyContact": "222"
     },
     {
       "id": "M012",
@@ -90,6 +90,19 @@
       "Adress": "ert",
       "EmergencyContactPrsn": "ertg",
       "EmergencyContact": "1234567894"
+    },
+    {
+      "id": "M020",
+      "FirstName": "kannand",
+      "LastName": "kumard",
+      "UserName": "raj",
+      "NIC": "123456789123",
+      "Phone": "1234567896",
+      "DoB": "male",
+      "Gender": "2024-10-03",
+      "Adress": "kkas road, Chunnakam",
+      "EmergencyContact": "7894561235",
+      "EmergencyContactPrsn": "rajinikanth"
     }
   ],
   "Users": [
@@ -103,7 +116,7 @@
     {
       "id": "M012",
       "MemberID": "M002",
-      "UserName": "rojan",
+      "UserName": "admin",
       "Password": "c123",
       "UserRoll": "admin"
     },
@@ -184,7 +197,7 @@
     },
     {
       "id": "A007",
-      "TypeID": "P001",
+      "TypeID": "P002",
       "ActivityName": "Weight Lift",
       "Cost": "500"
     }
@@ -194,11 +207,6 @@
       "id": "E016",
       "MemberID": "M001",
       "ActivittID": "A003"
-    },
-    {
-      "id": "E017",
-      "MemberID": "M011",
-      "ActivittID": "A004"
     },
     {
       "id": "E018",
@@ -1076,6 +1084,41 @@
       "PaymentMethod": "Cash",
       "PaidDate": "2024-10-17",
       "DueDate": null
+    },
+    {
+      "id": "P111",
+      "MemberID": "M020",
+      "PaymentType": "Initial",
+      "Amount": 2500,
+      "PaymentMethod": "Bank",
+      "DueDate": null
+    },
+    {
+      "id": "P112",
+      "MemberID": "M001",
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "PaymentMethod": "Bank"
+    },
+    {
+      "id": "P113",
+      "MemberID": "M001",
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "PaymentMethod": "Bank"
+    },
+    {
+      "id": "P114",
+      "MemberID": "M001",
+      "PaymentType": "Half-Yearly",
+      "Amount": 3700,
+      "PaidDate": "2024-10-17",
+      "DueDate": "2025-04-15",
+      "PaymentMethod": "Bank"
     }
   ],
   "Alerts": [
@@ -1152,65 +1195,36 @@
       "Status": true
     },
     {
-      "id": "AT004",
+      "id": "AT022",
       "AlertType": "paymentrequestMessage",
       "Amount": 3700,
       "programOrEnrollid": null,
       "DueDate": "2025-04-15",
       "MemberID": "M001",
-      "Status": true
+      "AccessedDate": "10/18/2024",
+      "Action": false,
+      "Status": false
     },
     {
-      "id": "AT008",
+      "id": "AT023",
       "AlertType": "leaveProgramRequestMessage",
-      "Amount": 4593.548387096774,
-      "programOrEnrollid": 6,
-      "DueDate": null,
-      "MemberID": "M001",
-      "Status": false
-    },
-    {
-      "id": "AT009",
-      "AlertType": "programAddonRequestMessage",
       "Amount": null,
+      "programOrEnrollid": "A006",
       "DueDate": null,
+      "AccessedDate": "10/18/2024",
       "MemberID": "M001",
+      "Action": true,
       "Status": true
     },
     {
-      "id": "AT010",
-      "AlertType": "leaveProgramRequestMessage",
-      "Amount": 4593.548387096774,
-      "programOrEnrollid": 6,
-      "DueDate": null,
-      "MemberID": "M001",
-      "Status": false
-    },
-    {
-      "id": "AT011",
-      "AlertType": "memberInfoRequestMessage",
-      "Amount": null,
+      "id": "AT024",
+      "AlertType": "paymentrequestMessage",
+      "Amount": 3700,
       "programOrEnrollid": null,
-      "DueDate": null,
+      "DueDate": "2025-04-15",
       "MemberID": "M001",
-      "Status": true
-    },
-    {
-      "id": "AT012",
-      "AlertType": "memberInfoRequestMessage",
-      "Amount": null,
-      "programOrEnrollid": null,
-      "DueDate": null,
-      "MemberID": "M001",
-      "Status": false
-    },
-    {
-      "id": "AT013",
-      "AlertType": "memberInfoRequestMessage",
-      "Amount": null,
-      "programOrEnrollid": null,
-      "DueDate": null,
-      "MemberID": "M001",
+      "AccessedDate": "10/18/2024",
+      "Action": true,
       "Status": true
     }
   ],
@@ -1224,7 +1238,7 @@
       "ReceiptNumber": "dhj",
       "PaidDate": "2024-10-17",
       "DueDate": "2025-04-15",
-      "Status": "accepted"
+      "Status": "rejected"
     },
     {
       "id": "AR037",
@@ -1235,7 +1249,7 @@
       "ReceiptNumber": "fgh",
       "PaidDate": "2024-10-17",
       "DueDate": "2025-04-15",
-      "Status": "pending"
+      "Status": "accepted"
     },
     {
       "id": "AR038",
@@ -1253,9 +1267,9 @@
       "PaidDate": "2024-10-17",
       "DueDate": null,
       "ReceiptNumber": "dfv",
-      "ActivittID": 6,
+      "ActivittID": "A006",
       "ProgramTypeID": "P002",
-      "Status": "rejected"
+      "Status": "pending"
     },
     {
       "id": "AR040",
@@ -1265,7 +1279,7 @@
       "LastName": "Bala",
       "Phone": "12344569",
       "NIC": "970783288v",
-      "Status": "accepted"
+      "Status": "pending"
     },
     {
       "id": "AR041",
@@ -1281,7 +1295,7 @@
       "EmergencyContactName": "rajinikanth",
       "EmergencyContactNumber": "7896541235",
       "PaymentReceiptNumber": "vbn",
-      "Status": "accepted"
+      "Status": "pending"
     },
     {
       "id": "AR042",
@@ -1310,7 +1324,7 @@
       "ReceiptNumber": "dfgh",
       "ActivittID": "A003",
       "ProgramTypeID": "P001",
-      "Status": "Pending"
+      "Status": "pending"
     },
     {
       "id": "AR044",
@@ -1324,15 +1338,27 @@
       "ActivittID": "A003",
       "ProgramTypeID": "P001",
       "Status": "Pending"
+    },
+    {
+      "id": "AR045",
+      "RequestType": "changeMemberInfo",
+      "MemberID": "M001",
+      "FirstName": "Rojann",
+      "LastName": "Bala",
+      "Phone": "12344569",
+      "Adress": "xyz",
+      "EmergencyContactPrsn": "kumar",
+      "EmergencyContact": "222",
+      "Status": "pending"
     }
   ],
   "LastId": {
     "id": 1,
-    "MemberId": 20,
-    "AlertID": 14,
-    "EnrollProgramID": 30,
-    "PaymentID": 111,
+    "MemberId": 21,
+    "AlertID": 25,
+    "EnrollProgramID": 31,
+    "PaymentID": 115,
     "ActivityID": 8,
-    "ApprovalRequestID": 45
+    "ApprovalRequestID": 46
   }
 }
