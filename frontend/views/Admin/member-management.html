@@ -536,16 +536,19 @@
 
         function generateListItems(programs, activities, typeId) {
             const filteredPrograms = programs.filter(program => {
-                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                const activity = activities.find(activity => activity.id === program.ActivittID);
+              
+                console.log(activity)
                 return activity && activity.TypeID === typeId;
             });
+            console.log(filteredPrograms)
 
             if (filteredPrograms.length === 0) {
                 return typeId === "P001" ? '<p>No cardio programs enrolled</p>' : '<p>No weight training programs enrolled</p>';
             }
 
             return filteredPrograms.map(program => {
-                const activity = activities.find(activity => activity.ActivittID === program.ActivittID);
+                const activity = activities.find(activity => activity.id === program.ActivittID);
                 return activity ? activity.ActivityName : 'No matching activity';
             }).join(', ');
         }

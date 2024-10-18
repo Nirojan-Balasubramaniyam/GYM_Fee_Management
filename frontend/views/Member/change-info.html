@@ -50,6 +50,10 @@
     #content {
         overflow-y: scroll;
     }
+    #infoChangeContainer{
+        overflow-y: auto;
+        max-height: 500px;
+    }
 </style>
 
 <section id="content">
@@ -57,7 +61,7 @@
     <div id="changeInfoCard">
         <div class="row">
             <div class="col-12">
-                <div id="memberInfoCard" class="member-info-card-unique">
+                <div id="infoChangeContainer" class="member-info-card-unique">
 
                     <form id="memberForm" class="member-form-unique">
                         <label for="firstName" class="form-label-unique">First Name:</label>
@@ -69,8 +73,14 @@
                         <label for="phone" class="form-label-unique">Phone:</label>
                         <input type="text" id="phone" class="input-field-unique" placeholder="Enter Phone Number">
 
-                        <label for="nic" class="form-label-unique">NIC:</label>
-                        <input type="text" id="nic" class="input-field-unique" placeholder="Enter NIC">
+                        <label for="address" class="form-label-unique">Address:</label>
+                        <input type="text" id="address" class="input-field-unique" placeholder="Enter NIC">
+
+                        <label for="emrgncyContactName" class="form-label-unique">EmergencyContactName:</label>
+                        <input type="text" id="emrgncyContactName" class="input-field-unique" placeholder="Enter NIC">
+
+                        <label for="emrgncyContactNumber" class="form-label-unique">EmergencyContactNumber:</label>
+                        <input type="text" id="emrgncyContactNumber" class="input-field-unique" placeholder="Enter NIC">
 
                         <!-- <button type="button" id="saveButton" class="btn-unique">Save Changes</button> -->
                     </form>
@@ -106,7 +116,9 @@
             document.getElementById('firstName').value = member.FirstName;
             document.getElementById('lastName').value = member.LastName;
             document.getElementById('phone').value = member.Phone;
-            document.getElementById('nic').value = member.NIC;
+            document.getElementById('address').value = member.Adress;
+            document.getElementById('emrgncyContactName').value = member.EmergencyContactPrsn;
+            document.getElementById('emrgncyContactNumber').value = member.EmergencyContact;
         }
 
         document.getElementById('changeInfoButton').addEventListener('click', async () => {
@@ -118,7 +130,9 @@
                 FirstName: document.getElementById('firstName').value,
                 LastName: document.getElementById('lastName').value,
                 Phone: document.getElementById('phone').value,
-                NIC: document.getElementById('nic').value,
+                Adress:document.getElementById('address').value,
+                EmergencyContactPrsn: document.getElementById('emrgncyContactName').value,
+                EmergencyContact: document.getElementById('emrgncyContactNumber').value,
                 Status: "pending"
             };
 
