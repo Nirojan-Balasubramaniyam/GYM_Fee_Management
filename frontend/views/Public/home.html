@@ -1,36 +1,153 @@
+
 <style>
+    /* General reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Banner section styling */
     .banner {
-       
-        display: block;
-       
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/your-image-path.jpg') center/cover;
+        height: 635px;
+        text-align: center;
+        padding: 2rem;
+        color: #fff;
     }
 
     .banner-content {
-        margin: 2rem;
-        margin-top: 4rem;
+        max-width: 800px;
+        /* margin-top: 300px; */
     }
 
-    .services {
-        background-color: rgb(41, 40, 37);
-        display: block;
+    .banner h2 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+        color: #ffffff; /* Gold color for a striking effect */
+        text-transform: uppercase;
+        animation: fadeInDown 1s ease-in-out;
     }
 
-    .service-section {
-        display: flex;
-        justify-content: center;
+    .banner h3 {
+        color: rgb(255, 255, 255);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 1.2s ease-in-out;
     }
 
     .banner p {
-        font-size: x-large;
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: #f4f4f4;
+        animation: fadeIn 1.4s ease-in-out;
+    }
+
+    /* Footer styling */
+    footer {
+        /* background: linear-gradient(135deg, black,red); */
+        /* background-color: red; */
+        padding: 2rem;
+        width: 1200px;
+        text-align: center;
         color: white;
     }
-    .banner h3{
-        color: bisque;
-        font-size: xx-large;
-        margin: 10px;
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        padding: 1rem;
     }
-    
+
+    .footer-logo h2 {
+        font-size: 2rem;
+        color:  #ffffff; /* Gold to highlight the brand name */
+    }
+
+    .social-icons a {
+        margin: 0 10px;
+        color: white;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+        color: #07dd00;
+    }
+
+    .footer-text p {
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Responsive styling */
+    @media (max-width: 768px) {
+        .banner h2 {
+            font-size: 2.5rem;
+        }
+
+        .banner h3 {
+            font-size: 2rem;
+        }
+
+        .banner p {
+            font-size: 1rem;
+        }
+
+        .footer-container {
+            flex-direction: column;
+            text-align: center;
+          
+        }
+
+        .footer-logo,
+        .social-icons,
+        .footer-text {
+            margin-bottom: 1rem;
+        }
+    }
 </style>
+
+
 
 <section class="banner">
     <div class="banner-content">
@@ -49,7 +166,7 @@
 <footer>
     <div class="footer-container">
         <div class="footer-logo">
-            <h2>ADVANCE FITNESS GYM</h2>
+            <h2>FITNESS OR FIGHT</h2>
         </div>
         <div class="social-icons">
             <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>

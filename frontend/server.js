@@ -64,7 +64,7 @@ const server = http.createServer(async (req, res) => {
   let layout_use = "./layouts/layout-member.html";
 
   if (req.url === "/") {
-    filePath = "./views/Public/home.html";
+    filePath = "./views/Public/login.html";
     layout_use = "./layouts/layout-public.html";
   }
   else if (req.url === "/calculate") {
