@@ -28,6 +28,7 @@
     .notification-table-row td {
         padding: 15px 0;
         letter-spacing: 2px;
+        color: black;
         /* font-weight: bold; */
     }
 
@@ -134,7 +135,7 @@
                         }
                     } else {
                         if (alert.AlertType === 'paymentrequestMessage') {
-                            alertContent = `<td> Your Payment Request of Rs ${alert.Amount} was declined!</td>`;
+                            alertContent = `<td> Your Payment Request of Rs ${alert.Amount} was declined! </td>`;
                         } else if (alert.AlertType === 'leaveProgramRequestMessage') {
                             alertContent = `<td> Your Leave Request of activity ${programName} was declined!</td>`;
                         } else if (alert.AlertType === 'programAddonRequestMessage') {
@@ -147,6 +148,7 @@
 
                 // Add the close (X) button if it's not an 'overdue' or 'renewal' type
                 if (alert.AlertType !== 'overdue' && alert.AlertType !== 'renewal') {
+                    alertContent += ` <td> <span style="color: #555; font-size: 15px;"> - (${alert.AccessedDate})</span></td>`;
                     alertContent += `<td><a class="close-btn" data-index="${index}">&times;</a></td>`;
                 }
 
