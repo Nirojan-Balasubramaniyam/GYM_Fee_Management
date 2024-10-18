@@ -137,9 +137,7 @@
 
         function displayIncomeOverdue() {
             payments.forEach(payment => {
-                if (payment.PaymentType === "Initial" || payment.PaymentType === "Monthly") {
                     totalIncome += payment.Amount;
-                }
             });
 
             alerts.forEach(alert => {
@@ -152,8 +150,8 @@
             const incomeDiv = document.getElementById("income");
             console.log(totalIncome);
 
-            incomeDiv.innerHTML = `Total<br> Revenue<br><br><br>Rs${totalIncome}`;
-            overdueDiv.innerHTML = `Total<br> Overdue<br><br><br>Rs${totalOverdue}`;
+            incomeDiv.innerHTML = `Total<br> Revenue<br><br><br>Rs${totalIncome.toFixed(2)}`;
+            overdueDiv.innerHTML = `Total<br> Overdue<br><br><br>Rs${totalOverdue.toFixed(2)}`;
         };
 
         function displayNotifications() {

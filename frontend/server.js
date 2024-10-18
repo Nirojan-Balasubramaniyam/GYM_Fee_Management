@@ -83,6 +83,10 @@ const server = http.createServer(async (req, res) => {
     filePath = "./views/Public/login.html";
     layout_use = "./layouts/layout-public.html";
   }
+  else if (req.url === "/member-registration") {
+    filePath = "./views/Public/member-registration.html";
+    layout_use = "./layouts/layout-public.html";
+  }
 
   //handle logged in member page requests
   else if (req.url === "/member") {
@@ -147,6 +151,10 @@ const server = http.createServer(async (req, res) => {
   }
   else if (req.url === "/program-reports") {
     filePath = "./views/Admin/program-reports.html";
+    layout_use = "./layouts/layout-admin.html";
+  }
+  else if (req.url === "/program-add") {
+    filePath = "./views/Admin/program-add.html";
     layout_use = "./layouts/layout-admin.html";
   }
   else if (req.url === "/payment-reports") {

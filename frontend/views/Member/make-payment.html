@@ -10,7 +10,8 @@
         text-align: center;
     }
 
-    #paymentForm input {
+    #paymentForm input,
+    #paymentForm select {
         width: 100%;
         padding: 10px;
         margin-bottom: 15px;
@@ -19,7 +20,8 @@
         font-size: 16px;
     }
 
-    #paymentForm input:focus {
+    #paymentForm input:focus,
+    #paymentForm select:focus {
         outline: none;
         border-color: #1abc9c;
     }
@@ -64,6 +66,8 @@
             <div class="col-12">
                 <div id="paymentSection">
                     <form id="paymentForm">
+                        <select id="monthsSelect" class="form-input"></select>
+
                         <label for="amount">Amount (LKR):</label>
                         <input type="number" id="amount" placeholder="Enter amount" required>
 
@@ -96,6 +100,8 @@
         let payments = [];
         let trainingProgramActivities = [];
         let enrolledPrograms = [];
+        let enrollMonths = [{ period: 1, discount: 0 }, { period: 3, discount: 10 }, { period: 6, discount: 15 }, { period: 12, discount: 25 },];
+        let finalAmount = 0;
 
         const paymentResponse = await fetch(paymentsUrl);
         payments = await paymentResponse.json();
@@ -112,6 +118,20 @@
         const lastidsResponse = await fetch(lastIdUrl);
         lastIds = await lastidsResponse.json();
 
+        const monthSelect = document.getElementById('monthsSelect');
+        monthSelect.innerHTML = '';
+        let defaultMonthOption = document.createElement('option');
+        defaultMonthOption.text = "Select Month";
+        defaultMonthOption.value = 1;
+        monthSelect.appendChild(defaultMonthOption);
+
+        enrollMonths.forEach(month => {
+            const option = document.createElement('option');
+            option.value = month.period;
+            option.text = `${month.period} - Discount ${month.discount} %`;
+            monthSelect.appendChild(option);
+        });
+
         const memberPrograms = enrolledPrograms.filter(program => program.MemberID === loggedInUser.id);
         console.log(memberPrograms)
         const totalPayment = memberPrograms.reduce((total, program) => {
@@ -123,81 +143,94 @@
 
         document.getElementById('amount').value = totalPayment;
 
-        document.getElementById('paymentForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const memberId = Number(getQueryParam('memberId'));
-            console.log(memberId);
-
-            const fetchApprovals = async () => {
-                const response = await fetch(approvalRequestsUrl);
-                approvalRequests = await response.json();
-                console.log(approvalRequestsUrl);
-
-                const amount = totalPayment;
-                const receiptNumber = document.getElementById('receiptNumber').value.trim();
-                const receiptFile = document.getElementById('receiptUpload').files[0];
-                const fetchlastId = async () => {
-                    const response = await fetch(lastIdUrl);
-                    lastIds = await response.json();
-                    console.log(lastIds);
-
-                    let lastAprovalId = lastIds.ApprovalRequestID;
-                    console.log(lastAprovalId);
-
-                    function generateID() {
-                        const prefix = "AR";
-                        const number = lastAprovalId.toString().padStart(3, '0');
-                        lastAprovalId++;
-                        lastIds.ApprovalRequestID = lastAprovalId;
-                        updateLastId(lastIds);
-                        return prefix + number;
-                    }
-
-                    const updateLastId = async (updatedLastIds) => {
-                        try {
-                            const response = await fetch(`${lastIdUrl}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(updatedLastIds)
-                            });
-                        } catch (error) {
-                            console.error("Error updating LastId:", error);
-                        }
-                    };
-
-                    if (amount && receiptNumber && receiptFile) {
-                        const newApprovalRequest = {
-                            id: generateID(),
-                            RequestType: "payment",
-                            MemberID: memberId,
-                            PaymentDetails: {
-                                PaymentType: "monthly",
-                                Amount: parseFloat(amount),
-                                ReceiptNumber: receiptNumber,
-                                PaidDate: new Date().toISOString().split('T')[0]
-                            },
-                            Status: "pending"
-                        };
-
-                        const postResponse = await fetch(approvalRequestsUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(newApprovalRequest)
-                        });
-                        alert('Payment request sent to admin for approval!');
-                    } else {
-                        alert('Please complete all fields.');
-                    }
-                };
-
-                fetchlastId();
-            };
-            fetchApprovals();
+        document.getElementById("monthsSelect").addEventListener("change", () => {
+            finalAmount = 0;
+            const selectedMonths = Number(document.getElementById('monthsSelect').value);
+            finalAmount = calculateDiscountedAmount(totalPayment, selectedMonths);
+            document.getElementById('amount').value = finalAmount;
         });
 
+        document.getElementById('paymentForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const memberId = loggedInUser.id;
+            console.log(memberId);
+
+            const response = await fetch(approvalRequestsUrl);
+            approvalRequests = await response.json();
+            console.log(approvalRequestsUrl);
+
+            const amount = finalAmount;
+            const receiptNumber = document.getElementById('receiptNumber').value.trim();
+            const receiptFile = document.getElementById('receiptUpload').files[0];
+            const selectedMonths = Number(document.getElementById('monthsSelect').value);
+
+            const paidDate = new Date();
+            const dueDate = new Date();
+
+            let paymentType = "Monthly";
+            if (selectedMonths === 1) {
+                dueDate.setDate(paidDate.getDate() + 30); // Set due date to 30 days from today
+            } else if (selectedMonths === 3) {
+                paymentType = "Quarterly";
+                dueDate.setDate(paidDate.getDate() + 90); // Set due date to 90 days (approx. 3 months)
+            } else if (selectedMonths === 6) {
+                paymentType = "Half-Yearly";
+                dueDate.setDate(paidDate.getDate() + 180); // Set due date to 180 days (approx. 6 months)
+            } else if (selectedMonths === 12) {
+                paymentType = "Annually";
+                dueDate.setDate(paidDate.getDate() + 365); // Set due date to 365 days (1 year)
+            }
+
+            if (amount && receiptNumber && receiptFile) {
+                const newApprovalRequest = {
+                    id: generateID("AR", lastIds.ApprovalRequestID),
+                    RequestType: "payment",
+                    MemberID: memberId,
+                    PaymentType: paymentType,
+                    Amount: parseFloat(amount),
+                    ReceiptNumber: receiptNumber,
+                    PaidDate: paidDate.toISOString().split('T')[0],
+                    DueDate: dueDate.toISOString().split('T')[0],
+                    Status: "pending"
+                };
+
+                const postResponse = await postApi(approvalRequestsUrl, newApprovalRequest);
+                if (postResponse.ok) {
+                    lastIds.ApprovalRequestID++
+                    updateLastId(lastIds);
+                    alert('Payment request sent to admin for approval!');
+                    location.reload();
+                }
+            } else {
+                alert('Please complete all fields.');
+            }
+
+        });
+
+        function calculateDiscountedAmount(amount, months) {
+            let finalAmount;
+
+            switch (months) {
+                case 1:
+                    finalAmount = amount;
+                    break;
+                case 3:
+                    finalAmount = amount - (amount * 0.10);
+                    break;
+                case 6:
+                    finalAmount = amount - (amount * 0.15);
+                    break;
+                case 12:
+                    finalAmount = amount - (amount * 0.25);
+                    break;
+            }
+
+            console.log(finalAmount)
+            if (months === 1) {
+                return finalAmount;
+            } else {
+                return Math.ceil(finalAmount / 100) * 100;
+            }
+        }
     })
 </script>

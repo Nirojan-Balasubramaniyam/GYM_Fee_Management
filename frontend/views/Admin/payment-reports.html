@@ -298,6 +298,10 @@
         const paymentsResponse = await fetch(paymentsUrl);
         payments = await paymentsResponse.json();
 
+        let monthlyReportBtn = document.getElementById("monthlyReportBtn");
+        let overdueReportBtn = document.getElementById("overdueReportBtn");
+        let initialReportBtn = document.getElementById("initialReportBtn");
+
         let selectedReport = 2;
 
         let overdueDiv = document.getElementById("overdue-report-section");
@@ -309,16 +313,40 @@
         document.getElementById("initialReportBtn").addEventListener("click", ()=>{
             selectedReport=3;
             viewReport(selectedReport);
+            monthlyReportBtn.style.backgroundColor="#b71c1c";
+            monthlyReportBtn.style.color="white";
+
+            overdueReportBtn.style.backgroundColor="#b71c1c";
+            overdueReportBtn.style.color="white";
+
+            initialReportBtn.style.backgroundColor="white";
+            initialReportBtn.style.color="#b71c1c";
         });
 
         document.getElementById("monthlyReportBtn").addEventListener("click", ()=>{
             selectedReport=2;
             viewReport(selectedReport);
+            monthlyReportBtn.style.backgroundColor="white";
+            monthlyReportBtn.style.color="#b71c1c";
+
+            overdueReportBtn.style.backgroundColor="#b71c1c";
+            overdueReportBtn.style.color="white";
+
+            initialReportBtn.style.backgroundColor="#b71c1c";
+            initialReportBtn.style.color="white";
         });
 
         document.getElementById("overdueReportBtn").addEventListener("click", ()=>{
             selectedReport=1;
             viewReport(selectedReport);
+            monthlyReportBtn.style.backgroundColor="#b71c1c";
+            monthlyReportBtn.style.color="white";
+
+            overdueReportBtn.style.backgroundColor="white";
+            overdueReportBtn.style.color="#b71c1c";
+
+            initialReportBtn.style.backgroundColor="#b71c1c";
+            initialReportBtn.style.color="white";
         });
 
 

@@ -18,6 +18,7 @@
             background-color: #f8f9fa;
             transition: width 0.9s ease, opacity 0.1s ease-out;
         }
+
         .collapsed-sidebar {
             width: 0px;
             opacity: 0;
@@ -62,6 +63,7 @@
             padding: 0px;
             height: 170px;
         }
+        
     </style>
 
     <link rel="stylesheet" href="../static/css/admin-style.css">
@@ -77,13 +79,14 @@
             <li><a href="/admin" id="dashboardBtn">Dashboard</a></li>
             <li><a href="/member-management" id="membersBtn">Members Management</a></li>
             <li><a href="/enroll-program" id="enrollProgramBtn">Enroll Programs</a></li>
+            <li><a href="/program-add" >Add Programs</a></li>
             <li><a href="/payment" id="paymentBtn">Payment</a></li>
             <li><a href="/approval-requests" id="approvalRequestBtn">Approval Requests</a></li>
 
             <li>
                 <div class="dropdown">
-                    <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static"
-                        aria-expanded="false">Reports</a>
+                    <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">Reports</a>
 
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="user-reports">User Reports</a></li>
@@ -92,7 +95,7 @@
                     </ul>
                 </div>
             </li>
-            <li><a href="/logout" id="logoutBtn">Logout</a></li>
+            <li><a href="/logout"><button  id="logoutBtn">Logout</button></a></li>
 
         </ul>
     </aside>
@@ -103,10 +106,107 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const lastIdUrl = "http://localhost:7000/LastId";
-        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedinuser'));
-        let userName = document.getElementById('adminName');
-        userName.innerHTML = capitalizeFirstLetter(loggedInUser.UserName);
+        document.addEventListener("DOMContentLoaded", async () => {
+            const paymentsUrl = "http://localhost:7000/Payments";
+            const lastIdUrl = "http://localhost:7000/LastId";
+            const alertsUrl = "http://localhost:7000/Alerts";
+            let alerts = [];
+
+            let payments = [];
+            let lastIds = [];
+
+            const paymentResponse = await fetch(paymentsUrl);
+            payments = await paymentResponse.json();
+
+            const lastidsResponse = await fetch(lastIdUrl);
+            lastIds = await lastidsResponse.json();
+
+            const alertsResponse = await fetch(alertsUrl);
+            alerts = await alertsResponse.json();
+
+            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedinuser'));
+            let userName = document.getElementById('adminName');
+            userName.innerHTML = capitalizeFirstLetter(loggedInUser.UserName);
+
+            await addNewAlerts(payments, alerts);
+
+            async function addNewAlerts(payments, alerts) {
+                const today = new Date();
+                const filterdPayments = payments.filter(payment => payment.PaymentType !== 'ProgramAddon' && payment.PaymentType !== 'Initial');
+                const lastPayments = filterdPayments.reduce((acc, payment) => {
+                    const memberId = payment.MemberID;
+                    if (!acc[memberId]) {
+                        acc[memberId] = [];
+                    }
+                    acc[memberId].push(payment);
+                    return acc;
+                }, {});
+
+                for (const memberId in lastPayments) {
+                    const memberPayments = lastPayments[memberId];
+                    memberPayments.sort((a, b) => {
+                        const paymentIdA = parseInt(a.id.substring(1), 10); // Remove first letter and convert to number
+                        const paymentIdB = parseInt(b.id.substring(1), 10);
+                        return paymentIdB - paymentIdA; // Compare the numerical part to find the last payment
+                    });
+
+                    const lastPayment = memberPayments[0];
+
+                    const lastDueDate = new Date(lastPayment.DueDate);
+                    const daysBeforeDue = Math.ceil((lastDueDate - today) / (1000 * 60 * 60 * 24));
+                    console.log(memberId)
+                    const memberRenewalAlerts = alerts.filter(alert => alert.MemberID === memberId && alert.AlertType === "renewal");
+                    console.log(memberRenewalAlerts)
+
+                    // If renewal alerts exist, check if they are overdue and update the status to false
+                    for (const renewalAlert of memberRenewalAlerts) {
+                        const renewalDueDate = new Date(renewalAlert.DueDate);
+                        if (renewalDueDate < today && renewalAlert.Status === true) {
+                            renewalAlert.Status = false;
+                            await putApi(alertsUrl, renewalAlert.id, renewalAlert);
+                            console.log(`Renewal alert status updated to false for MemberID: ${renewalAlert.MemberID}, AlertID: ${renewalAlert.id}`);
+                        }
+                    }
+
+                    const existingOverdueAlert = alerts.find(alert => alert.MemberID === memberId && alert.AlertType === "overdue");
+                    if (lastDueDate < today && !existingOverdueAlert) {
+                        const overdueAlert = {
+                            id: generateID("AT", lastIds.AlertID),
+                            AlertType: "overdue",
+                            Amount: lastPayment.Amount,
+                            programOrEnrollid: null,
+                            DueDate: lastPayment.DueDate,
+                            MemberID: lastPayment.MemberID,
+                            Status: true
+                        };
+                        await postApi(alertsUrl, overdueAlert);
+                        alerts.push(overdueAlert);
+                        lastIds.AlertID++;
+                        await updateLastId(lastIds);
+                        console.log(`Overdue alert added for MemberID: ${lastPayment.MemberID}`);
+                    }
+
+                    const existingRenewalAlert = alerts.find(alert => alert.MemberID === memberId && alert.AlertType === "renewal");
+                    if (daysBeforeDue <= 5 && daysBeforeDue >= 0 && !existingRenewalAlert && lastDueDate > today) {
+                        const renewalAlert = {
+                            id: generateID("AT", lastIds.AlertID),
+                            AlertType: "renewal",
+                            Amount: lastPayment.Amount,
+                            programOrEnrollid: null,
+                            DueDate: lastPayment.DueDate,
+                            MemberID: lastPayment.MemberID,
+                            Status: true
+                        };
+
+                        await postApi(alertsUrl, renewalAlert);
+                        alerts.push(renewalAlert);
+                        lastIds.AlertID++;
+                        await updateLastId(lastIds);
+                        console.log(`Renewal alert added for MemberID: ${lastPayment.MemberID}`);
+                    }
+                }
+            }
+        });
 
         const sidebar = document.getElementById('sidebar');
         //const closeBtn = document.getElementById('closeBtn');
@@ -138,7 +238,7 @@
         }
 
         async function updateLastId(arr) {
-            const response = await fetch(lastIdUrl, {
+            const response = await fetch(`http://localhost:7000/LastId`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,7 +268,7 @@
         };
 
         function capitalizeFirstLetter(string) {
-            return string.split('_').map(word => {
+            return string.split(' ').map(word => {
                 return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join('');
         }
