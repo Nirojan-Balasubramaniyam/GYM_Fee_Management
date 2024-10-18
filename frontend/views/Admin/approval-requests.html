@@ -476,8 +476,10 @@
 
             findedMember.FirstName = request.FirstName;
             findedMember.LastName = request.LastName;
-            findedMember.NIC = request.NIC;
             findedMember.Phone = request.Phone;
+            findedMember.Adress = request.Adress;
+            findedMember.EmergencyContactPrsn = request.EmergencyContactPrsn;
+            findedMember.EmergencyContact = request.EmergencyContact;
 
             const newAlert = {
                 id: generateID("AT", lastIds.AlertID),
