@@ -130,7 +130,8 @@
     #viewButton :hover {
         background-color: #560904;
     }
-    #nonViewedApprovalsButton{
+
+    #nonViewedApprovalsButton {
         background-color: white;
         color: darkblue;
         border: 1px solid darkblue;
@@ -311,7 +312,7 @@
 
         function openModal(request) {
             currentRequest = request;
-            requestDetailsDiv.innerHTML = '';    
+            requestDetailsDiv.innerHTML = '';
 
             const table = document.createElement('table');
             table.style.width = '100%';
@@ -374,9 +375,8 @@
 
         async function handleProgramLeaveRequest(request) {
             await deleteApi(enrolledTrainingProgramsUrl, request.leavedEmrollId);
-            let findedProgram = enrolledPrograms.find(program => program.id === alert.programOrEnrollid);
-            console.log(findedProgram)
-            let findedActivityId = findedProgram.id;
+            let findedProgram = enrolledPrograms.find(program => program.id === request.leavedEmrollId);
+            let findedActivityId = findedProgram.ActivittID;
             const newAlert = {
                 id: generateID("AT", lastIds.AlertID),
                 AlertType: "leaveProgramRequestMessage",
@@ -384,6 +384,7 @@
                 programOrEnrollid: findedActivityId,
                 DueDate: null,
                 MemberID: request.MemberID,
+                Action: true,
                 Status: true
             }
             const alertAddresponse = await postApi(alertsUrl, newAlert);
@@ -444,6 +445,7 @@
                 programOrEnrollid: request.leavedEmrollId,
                 DueDate: null,
                 MemberID: request.MemberID,
+                Action: true,
                 Status: true
             }
             const newPayment = {
@@ -484,6 +486,7 @@
                 programOrEnrollid: null,
                 DueDate: null,
                 MemberID: request.MemberID,
+                Action: true,
                 Status: true
             }
             const memberChangeResponse = await putApi(membersUrl, request.MemberID, findedMember);
@@ -556,6 +559,7 @@
                 programOrEnrollid: null,
                 DueDate: request.DueDate,
                 MemberID: request.MemberID,
+                Action: true,
                 Status: true
             }
             const response = await postApi(alertsUrl, newAlert);
@@ -582,7 +586,8 @@
                             programOrEnrollid: null,
                             DueDate: currentRequest.DueDate,
                             MemberID: currentRequest.MemberID,
-                            Status: false
+                            Action: false,
+                            Status: true
                         }
                         const paymentResponse = await postApi(alertsUrl, paymentAlert);
                         lastIds.AlertID++;
@@ -596,14 +601,20 @@
 
 
                     case 'leaveProgram':
+                        console.log(currentRequest.leavedEmrollId)
+                        let findedProgram = enrolledPrograms.find(program => program.id === currentRequest.leavedEmrollId);
+                        console.log("qwertyui" + findedProgram)
+                        let findedActivityId = findedProgram.ActivittID;
+                        console.log("sfvdsfvds" + findedProgram.ActivittID)
                         const leaveProgramAlert = {
                             id: generateID("AT", lastIds.AlertID),
                             AlertType: "leaveProgramRequestMessage",
                             Amount: null,
-                            programOrEnrollid: currentRequest.leavedEmrollId,
+                            programOrEnrollid: findedActivityId,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
-                            Status: false
+                            Action: false,
+                            Status: true
                         }
                         const leaveProgramResponse = await postApi(alertsUrl, leaveProgramAlert);
                         lastIds.AlertID++;
@@ -619,12 +630,13 @@
                     case 'programAddon':
                         const programAddonAlert = {
                             id: generateID("AT", lastIds.AlertID),
-                            AlertType: "leaveProgramRequestMessage",
+                            AlertType: "programAddonRequestMessage",
                             Amount: currentRequest.Amount,
                             programOrEnrollid: currentRequest.ActivittID,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
-                            Status: false
+                            Action: false,
+                            Status: true
                         }
                         const programAddonResponse = await postApi(alertsUrl, programAddonAlert);
                         lastIds.AlertID++;
@@ -644,7 +656,8 @@
                             programOrEnrollid: null,
                             DueDate: null,
                             MemberID: currentRequest.MemberID,
-                            Status: false
+                            Action: false,
+                            Status: true
                         }
                         const changeMemberInfoResponse = await postApi(alertsUrl, changeMemberInfoAlert);
                         lastIds.AlertID++;
@@ -658,6 +671,7 @@
 
                     default:
                         console.log('Other request type handling not implemented');
+                        break;
                 }
                 await updateRequestStatus(currentRequest, 'rejected');
                 viewModal.style.display = 'none';
